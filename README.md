@@ -1,16 +1,20 @@
 # India Civic Transparency Platform
 
+### License
+
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+
 A full-stack civic data platform that visualizes Indian public datasets to help citizens understand government systems — Supreme Court judgments, crime statistics, district-level geographic data, and infrastructure development.
 
 ## Architecture
 
 ```
-┌─────────────┐     ┌──────────────┐     ┌───────────────────┐
-│   Frontend   │────▶│   Backend    │────▶│  PostgreSQL +     │
-│  React/Vite  │     │  Express API │     │  PostGIS          │
-│  Leaflet     │◀────│  pino logger │◀────│  dataset_ingestion│
-│  Tailwind CSS│     │              │     │  _log             │
-└─────────────┘     └──────────────┘     └───────────────────┘
+┌───────────────┐       ┌──────────────┐       ┌───────────────────┐
+│   Frontend    │ ────> │   Backend    │ ────> │  PostgreSQL +     │
+│  React/Vite   │       │  Express API │       │  PostGIS          │
+│  Leaflet      │ <──── │  pino logger │ <──── │  dataset_ingestion│
+│  Tailwind CSS │       │              │       │  _log             │
+└───────────────┘       └──────────────┘       └───────────────────┘
                            ▲
                            │ cache/static/
                            │ india-districts.topojson
@@ -193,6 +197,4 @@ india-civic-transparency/
 └── seed_data/        Demo datasets for instant setup
 ```
 
-## License
 
-MIT
