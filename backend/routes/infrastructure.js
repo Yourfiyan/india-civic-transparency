@@ -5,6 +5,27 @@ const router = express.Router();
 const db = require('../db');
 const { logger } = require('../lib/logger');
 
+// GET /api/infrastructure/geo — projects with district centroids
+router.get('/geo', async (req, res, next) => {
+  try {
+    const result = await db.query(
+      `SELECT ip.id, ip.project_name, ip.scheme, ip.status,
+              ip.sanctioned_cost, ip.completion_pct, ip.year,
+              d.id AS district_id, d.name AS district_name, d.state,
+              ST_X(ST_Centroid(d.geom)) AS lng,
+              ST_Y(ST_Centroid(d.geom)) AS lat
+       FROM infrastructure_projects ip
+       JOIN districts d ON d.id = ip.district_id
+       WHERE d.geom IS NOT NULL
+       ORDER BY d.name, ip.year DESC`
+    );
+    res.json({ projects: result.rows });
+  } catch (err) {
+    logger.error({ err }, 'Failed to fetch infrastructure geo data');
+    next(err);
+  }
+});
+
 // GET /api/infrastructure — filtered list
 router.get('/', async (req, res, next) => {
   try {
