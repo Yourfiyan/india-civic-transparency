@@ -1,0 +1,105 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "name": "Mumbai", "name_normalized": "mumbai", "state": "Maharashtra", "state_normalized": "maharashtra", "census_code": "MH-MU", "population": 12442373, "area_sq_km": 603, "dataset_source": "datameet", "dataset_version": "seed-v1", "ingested_at": "2026-01-01T00:00:00Z" },
+      "geometry": { "type": "MultiPolygon", "coordinates": [[[[72.77, 19.25], [72.98, 19.25], [72.98, 18.89], [72.77, 18.89], [72.77, 19.25]]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Delhi", "name_normalized": "delhi", "state": "Delhi", "state_normalized": "delhi", "census_code": "DL-DL", "population": 11034555, "area_sq_km": 1484, "dataset_source": "datameet", "dataset_version": "seed-v1", "ingested_at": "2026-01-01T00:00:00Z" },
+      "geometry": { "type": "MultiPolygon", "coordinates": [[[[76.84, 28.88], [77.35, 28.88], [77.35, 28.40], [76.84, 28.40], [76.84, 28.88]]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Bengaluru Urban", "name_normalized": "bengaluru urban", "state": "Karnataka", "state_normalized": "karnataka", "census_code": "KA-BU", "population": 9621551, "area_sq_km": 2196, "dataset_source": "datameet", "dataset_version": "seed-v1", "ingested_at": "2026-01-01T00:00:00Z" },
+      "geometry": { "type": "MultiPolygon", "coordinates": [[[[77.40, 13.15], [77.80, 13.15], [77.80, 12.80], [77.40, 12.80], [77.40, 13.15]]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Chennai", "name_normalized": "chennai", "state": "Tamil Nadu", "state_normalized": "tamil nadu", "census_code": "TN-CH", "population": 7088000, "area_sq_km": 426, "dataset_source": "datameet", "dataset_version": "seed-v1", "ingested_at": "2026-01-01T00:00:00Z" },
+      "geometry": { "type": "MultiPolygon", "coordinates": [[[[80.15, 13.20], [80.35, 13.20], [80.35, 12.90], [80.15, 12.90], [80.15, 13.20]]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Kolkata", "name_normalized": "kolkata", "state": "West Bengal", "state_normalized": "west bengal", "census_code": "WB-KO", "population": 4496694, "area_sq_km": 205, "dataset_source": "datameet", "dataset_version": "seed-v1", "ingested_at": "2026-01-01T00:00:00Z" },
+      "geometry": { "type": "MultiPolygon", "coordinates": [[[[88.25, 22.65], [88.50, 22.65], [88.50, 22.45], [88.25, 22.45], [88.25, 22.65]]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Pune", "name_normalized": "pune", "state": "Maharashtra", "state_normalized": "maharashtra", "census_code": "MH-PU", "population": 7276000, "area_sq_km": 15643, "dataset_source": "datameet", "dataset_version": "seed-v1", "ingested_at": "2026-01-01T00:00:00Z" },
+      "geometry": { "type": "MultiPolygon", "coordinates": [[[[73.70, 18.70], [74.10, 18.70], [74.10, 18.35], [73.70, 18.35], [73.70, 18.70]]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Jaipur", "name_normalized": "jaipur", "state": "Rajasthan", "state_normalized": "rajasthan", "census_code": "RJ-JP", "population": 6626178, "area_sq_km": 11152, "dataset_source": "datameet", "dataset_version": "seed-v1", "ingested_at": "2026-01-01T00:00:00Z" },
+      "geometry": { "type": "MultiPolygon", "coordinates": [[[[75.60, 27.20], [76.00, 27.20], [76.00, 26.70], [75.60, 26.70], [75.60, 27.20]]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Lucknow", "name_normalized": "lucknow", "state": "Uttar Pradesh", "state_normalized": "uttar pradesh", "census_code": "UP-LU", "population": 4589838, "area_sq_km": 2528, "dataset_source": "datameet", "dataset_version": "seed-v1", "ingested_at": "2026-01-01T00:00:00Z" },
+      "geometry": { "type": "MultiPolygon", "coordinates": [[[[80.80, 27.00], [81.10, 27.00], [81.10, 26.70], [80.80, 26.70], [80.80, 27.00]]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Ahmedabad", "name_normalized": "ahmedabad", "state": "Gujarat", "state_normalized": "gujarat", "census_code": "GJ-AH", "population": 7650000, "area_sq_km": 8107, "dataset_source": "datameet", "dataset_version": "seed-v1", "ingested_at": "2026-01-01T00:00:00Z" },
+      "geometry": { "type": "MultiPolygon", "coordinates": [[[[72.40, 23.20], [72.80, 23.20], [72.80, 22.85], [72.40, 22.85], [72.40, 23.20]]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Hyderabad", "name_normalized": "hyderabad", "state": "Telangana", "state_normalized": "telangana", "census_code": "TG-HY", "population": 7749334, "area_sq_km": 650, "dataset_source": "datameet", "dataset_version": "seed-v1", "ingested_at": "2026-01-01T00:00:00Z" },
+      "geometry": { "type": "MultiPolygon", "coordinates": [[[[78.30, 17.55], [78.60, 17.55], [78.60, 17.25], [78.30, 17.25], [78.30, 17.55]]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Patna", "name_normalized": "patna", "state": "Bihar", "state_normalized": "bihar", "census_code": "BR-PA", "population": 5772804, "area_sq_km": 3202, "dataset_source": "datameet", "dataset_version": "seed-v1", "ingested_at": "2026-01-01T00:00:00Z" },
+      "geometry": { "type": "MultiPolygon", "coordinates": [[[[84.90, 25.75], [85.30, 25.75], [85.30, 25.50], [84.90, 25.50], [84.90, 25.75]]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Thiruvananthapuram", "name_normalized": "thiruvananthapuram", "state": "Kerala", "state_normalized": "kerala", "census_code": "KL-TV", "population": 3307284, "area_sq_km": 2192, "dataset_source": "datameet", "dataset_version": "seed-v1", "ingested_at": "2026-01-01T00:00:00Z" },
+      "geometry": { "type": "MultiPolygon", "coordinates": [[[[76.80, 8.65], [77.10, 8.65], [77.10, 8.35], [76.80, 8.35], [76.80, 8.65]]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Bhopal", "name_normalized": "bhopal", "state": "Madhya Pradesh", "state_normalized": "madhya pradesh", "census_code": "MP-BH", "population": 2371061, "area_sq_km": 2772, "dataset_source": "datameet", "dataset_version": "seed-v1", "ingested_at": "2026-01-01T00:00:00Z" },
+      "geometry": { "type": "MultiPolygon", "coordinates": [[[[77.25, 23.40], [77.55, 23.40], [77.55, 23.10], [77.25, 23.10], [77.25, 23.40]]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Guwahati", "name_normalized": "guwahati", "state": "Assam", "state_normalized": "assam", "census_code": "AS-KA", "population": 968549, "area_sq_km": 328, "dataset_source": "datameet", "dataset_version": "seed-v1", "ingested_at": "2026-01-01T00:00:00Z" },
+      "geometry": { "type": "MultiPolygon", "coordinates": [[[[91.60, 26.25], [91.90, 26.25], [91.90, 26.05], [91.60, 26.05], [91.60, 26.25]]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Chandigarh", "name_normalized": "chandigarh", "state": "Chandigarh", "state_normalized": "chandigarh", "census_code": "CH-CH", "population": 1055450, "area_sq_km": 114, "dataset_source": "datameet", "dataset_version": "seed-v1", "ingested_at": "2026-01-01T00:00:00Z" },
+      "geometry": { "type": "MultiPolygon", "coordinates": [[[[76.70, 30.80], [76.85, 30.80], [76.85, 30.68], [76.70, 30.68], [76.70, 30.80]]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Dehradun", "name_normalized": "dehradun", "state": "Uttarakhand", "state_normalized": "uttarakhand", "census_code": "UK-DD", "population": 1696694, "area_sq_km": 3088, "dataset_source": "datameet", "dataset_version": "seed-v1", "ingested_at": "2026-01-01T00:00:00Z" },
+      "geometry": { "type": "MultiPolygon", "coordinates": [[[[77.80, 30.50], [78.20, 30.50], [78.20, 30.10], [77.80, 30.10], [77.80, 30.50]]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Raipur", "name_normalized": "raipur", "state": "Chhattisgarh", "state_normalized": "chhattisgarh", "census_code": "CG-RA", "population": 4063872, "area_sq_km": 13083, "dataset_source": "datameet", "dataset_version": "seed-v1", "ingested_at": "2026-01-01T00:00:00Z" },
+      "geometry": { "type": "MultiPolygon", "coordinates": [[[[81.50, 21.40], [81.90, 21.40], [81.90, 21.10], [81.50, 21.10], [81.50, 21.40]]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Ranchi", "name_normalized": "ranchi", "state": "Jharkhand", "state_normalized": "jharkhand", "census_code": "JH-RA", "population": 2914253, "area_sq_km": 5097, "dataset_source": "datameet", "dataset_version": "seed-v1", "ingested_at": "2026-01-01T00:00:00Z" },
+      "geometry": { "type": "MultiPolygon", "coordinates": [[[[85.20, 23.50], [85.55, 23.50], [85.55, 23.20], [85.20, 23.20], [85.20, 23.50]]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Shimla", "name_normalized": "shimla", "state": "Himachal Pradesh", "state_normalized": "himachal pradesh", "census_code": "HP-SH", "population": 814010, "area_sq_km": 5131, "dataset_source": "datameet", "dataset_version": "seed-v1", "ingested_at": "2026-01-01T00:00:00Z" },
+      "geometry": { "type": "MultiPolygon", "coordinates": [[[[77.00, 31.30], [77.35, 31.30], [77.35, 31.00], [77.00, 31.00], [77.00, 31.30]]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Panaji", "name_normalized": "panaji", "state": "Goa", "state_normalized": "goa", "census_code": "GA-NG", "population": 818008, "area_sq_km": 1736, "dataset_source": "datameet", "dataset_version": "seed-v1", "ingested_at": "2026-01-01T00:00:00Z" },
+      "geometry": { "type": "MultiPolygon", "coordinates": [[[[73.75, 15.60], [74.00, 15.60], [74.00, 15.35], [73.75, 15.35], [73.75, 15.60]]]] }
+    }
+  ]
+}
