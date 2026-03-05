@@ -59,8 +59,16 @@ router.get('/', async (req, res, next) => {
       LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
     `;
 
-    const result = await db.query(sql, params);
-    res.json({ cases: result.rows, count: result.rowCount });
+    /* Separate total count query (uses only the WHERE conditions, not LIMIT/OFFSET) */
+    const countSql = `SELECT COUNT(*) FROM supreme_cases ${where}`;
+    const countParams = params.slice(0, -2); /* strip limitVal and offsetVal */
+
+    const [result, countResult] = await Promise.all([
+      db.query(sql, params),
+      db.query(countSql, countParams),
+    ]);
+
+    res.json({ cases: result.rows, count: parseInt(countResult.rows[0].count, 10) });
   } catch (err) {
     logger.error({ err, query: req.query }, 'Failed to fetch cases');
     next(err);

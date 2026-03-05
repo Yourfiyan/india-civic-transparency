@@ -19,7 +19,7 @@ const INDIA_BOUNDS: [[number, number], [number, number]] = [
   [97.5, 37.5],
 ];
 
-/* Fully self-contained style — no external tile/glyph/sprite requests */
+/* Fully self-contained style — zero external network requests */
 const BLANK_STYLE: maplibregl.StyleSpecification = {
   version: 8,
   name: 'blank-dark',
@@ -28,27 +28,10 @@ const BLANK_STYLE: maplibregl.StyleSpecification = {
     {
       id: 'background',
       type: 'background',
-      paint: { 'background-color': '#0f172a' },
+      paint: { 'background-color': '#1e293b' },   /* slate-800 — visible contrast */
     },
   ],
 };
-
-/* Score → color interpolation (red 0 → yellow 50 → green 100) */
-function scoreColor(score: number): string {
-  const t = Math.max(0, Math.min(100, score)) / 100;
-  if (t < 0.5) {
-    const s = t * 2;
-    const r = Math.round(239 * (1 - s) + 234 * s);
-    const g = Math.round(68 * (1 - s) + 179 * s);
-    const b = Math.round(68 * (1 - s) + 8 * s);
-    return `rgb(${r},${g},${b})`;
-  }
-  const s = (t - 0.5) * 2;
-  const r = Math.round(234 * (1 - s) + 34 * s);
-  const g = Math.round(179 * (1 - s) + 197 * s);
-  const b = Math.round(8 * (1 - s) + 94 * s);
-  return `rgb(${r},${g},${b})`;
-}
 
 const MapView = forwardRef<MapViewHandle, MapViewProps>(
   ({ layers, opacity, onDistrictClick }, ref) => {
@@ -79,7 +62,7 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
 
       /* ResizeObserver to keep canvas in sync with flex container */
       const ro = new ResizeObserver(() => {
-        map.resize();
+        if (mapRef.current) mapRef.current.resize();
       });
       ro.observe(container);
 
@@ -93,18 +76,18 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
       });
 
       map.on('load', async () => {
-        /* Load district boundaries */
         try {
+          /* ── Load district boundaries ── */
           const res = await fetch('/api/districts/topojson');
-          if (!res.ok) throw new Error('TopoJSON unavailable');
+          if (!res.ok) throw new Error(`TopoJSON ${res.status}`);
           const topo: Topology = await res.json();
           const objectKey = Object.keys(topo.objects)[0];
           const geojson = topojson.feature(
             topo,
-            topo.objects[objectKey] as GeometryCollection
+            topo.objects[objectKey] as GeometryCollection,
           );
 
-          /* Fetch scores and merge into GeoJSON properties */
+          /* ── Merge scores into properties as numeric _score ── */
           try {
             const scoreRes = await fetch('/api/analytics/district-score');
             if (scoreRes.ok) {
@@ -116,8 +99,7 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
               if ('features' in geojson) {
                 for (const f of (geojson as GeoJSON.FeatureCollection).features) {
                   const fid = Number(f.properties?.id ?? f.properties?.district_id);
-                  const sc = scoreMap.get(fid) ?? 50;
-                  f.properties = { ...f.properties, _score: sc, _color: scoreColor(sc) };
+                  f.properties = { ...f.properties, _score: scoreMap.get(fid) ?? 50 };
                 }
               }
             }
@@ -125,49 +107,57 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
 
           map.addSource('districts', { type: 'geojson', data: geojson });
 
-          /* base fill — colored by score */
+          /* ── Fill — native interpolate on _score (no external colors) ── */
           map.addLayer({
             id: 'districts-fill',
             type: 'fill',
             source: 'districts',
             paint: {
-              'fill-color': ['coalesce', ['get', '_color'], '#6366f1'],
-              'fill-opacity': opacity,
+              'fill-color': [
+                'interpolate', ['linear'],
+                ['coalesce', ['get', '_score'], 50],
+                0,   '#ef4444',
+                30,  '#f97316',
+                50,  '#eab308',
+                70,  '#84cc16',
+                100, '#22c55e',
+              ],
+              'fill-opacity': 0.7,
             },
           });
 
-          /* border */
+          /* ── Border ── */
           map.addLayer({
             id: 'districts-line',
             type: 'line',
             source: 'districts',
             paint: {
-              'line-color': '#94a3b8',
+              'line-color': '#cbd5e1',
               'line-width': 1.5,
-              'line-opacity': 0.8,
+              'line-opacity': 0.9,
             },
           });
 
-          /* hover highlight */
+          /* ── Hover highlight ── */
           map.addLayer({
             id: 'districts-hover',
             type: 'fill',
             source: 'districts',
             paint: {
-              'fill-color': '#818cf8',
-              'fill-opacity': 0.5,
+              'fill-color': '#a5b4fc',
+              'fill-opacity': 0.6,
             },
             filter: ['==', ['get', 'id'], ''],
           });
 
-          /* click highlight */
+          /* ── Click highlight ── */
           map.addLayer({
             id: 'districts-selected',
             type: 'fill',
             source: 'districts',
             paint: {
               'fill-color': '#f59e0b',
-              'fill-opacity': 0.55,
+              'fill-opacity': 0.65,
             },
             filter: ['==', ['get', 'id'], ''],
           });
@@ -183,25 +173,7 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
             filter: ['==', ['get', 'id'], ''],
           });
 
-          /* district name labels */
-          map.addLayer({
-            id: 'districts-labels',
-            type: 'symbol',
-            source: 'districts',
-            layout: {
-              'text-field': ['get', 'name'],
-              'text-size': 11,
-              'text-anchor': 'center',
-              'text-allow-overlap': false,
-            },
-            paint: {
-              'text-color': '#e2e8f0',
-              'text-halo-color': '#0f172a',
-              'text-halo-width': 1.5,
-            },
-          });
-
-          /* infrastructure markers (hidden by default) */
+          /* ── Infra markers (hidden by default) ── */
           map.addLayer({
             id: 'infra-markers',
             type: 'circle',
@@ -216,7 +188,7 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
             layout: { visibility: 'none' },
           });
 
-          /* hover events */
+          /* ── Hover events ── */
           map.on('mousemove', 'districts-fill', (e) => {
             const feature = e.features?.[0];
             if (!feature) return;
@@ -247,7 +219,7 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
             hoverPopup.current?.remove();
           });
 
-          /* click */
+          /* ── Click ── */
           map.on('click', 'districts-fill', (e) => {
             const feature = e.features?.[0];
             if (!feature) return;
@@ -260,8 +232,10 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
               onDistrictClick(Number(id), name);
             }
           });
-        } catch {
-          /* TopoJSON not available — map still shows dark background */
+
+          console.log('[MapView] Districts loaded:', (geojson as GeoJSON.FeatureCollection).features?.length ?? 0);
+        } catch (err) {
+          console.error('[MapView] Failed to load districts:', err);
         }
       });
 
@@ -280,7 +254,7 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
       if (!map || !map.isStyleLoaded()) return;
       const vis = (on: boolean): 'visible' | 'none' => on ? 'visible' : 'none';
 
-      const districtLayers = ['districts-fill', 'districts-line', 'districts-hover', 'districts-labels'];
+      const districtLayers = ['districts-fill', 'districts-line', 'districts-hover'];
       for (const id of districtLayers) {
         if (map.getLayer(id))
           map.setLayoutProperty(id, 'visibility', vis(layers.districts));
@@ -300,7 +274,7 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
     return (
       <div ref={containerRef} className="absolute inset-0" />
     );
-  }
+  },
 );
 
 MapView.displayName = 'MapView';
