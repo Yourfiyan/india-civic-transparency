@@ -2,47 +2,69 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { getCases } from '../api';
 import type { SupremeCase } from '../types';
 
+const PAGE_SIZE = 10;
+
 export default function CasePanel() {
   const [query, setQuery] = useState('');
   const [cases, setCases] = useState<SupremeCase[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const [expanded, setExpanded] = useState<string | null>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout>>();
 
-  const search = useCallback(async (q: string) => {
+  const search = useCallback(async (q: string, pg: number) => {
     setLoading(true);
     try {
-      const res = await getCases({ q: q || undefined, limit: 50 });
+      const res = await getCases({ q: q || undefined, limit: PAGE_SIZE, offset: pg * PAGE_SIZE });
       setCases(res.cases);
+      setTotalCount(res.count);
     } catch {
       setCases([]);
+      setTotalCount(0);
     } finally {
       setLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    search('');
+    search('', 0);
   }, [search]);
 
   const handleInput = (value: string) => {
     setQuery(value);
+    setPage(0);
     clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => search(value), 350);
+    debounceRef.current = setTimeout(() => search(value, 0), 350);
   };
+
+  const goToPage = (pg: number) => {
+    setPage(pg);
+    search(query, pg);
+  };
+
+  const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
+  const showing = Math.min(page * PAGE_SIZE + cases.length, totalCount);
 
   return (
     <div className="space-y-3">
+      <h2 className="text-xs font-semibold uppercase tracking-wider text-slate-400">Supreme Court Cases</h2>
       <div className="relative">
         <span className="absolute left-3 top-2.5 text-sm text-slate-500">🔍</span>
         <input
           type="text"
-          placeholder="Search cases…"
+          placeholder="Search supreme court cases…"
           value={query}
           onChange={(e) => handleInput(e.target.value)}
           className="w-full rounded-lg border border-slate-700 bg-slate-800/60 py-2.5 pl-9 pr-3 text-sm text-slate-200 placeholder-slate-500 outline-none transition-colors focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/30"
         />
       </div>
+
+      {!loading && totalCount > 0 && (
+        <p className="text-xs text-slate-500">
+          Showing {page * PAGE_SIZE + 1}–{showing} of {totalCount} supreme court cases
+        </p>
+      )}
 
       {loading && (
         <div className="flex items-center justify-center py-8">
@@ -89,6 +111,29 @@ export default function CasePanel() {
           )}
         </div>
       ))}
+
+      {/* Pagination controls */}
+      {!loading && totalPages > 1 && (
+        <div className="flex items-center justify-between pt-2">
+          <button
+            disabled={page === 0}
+            onClick={() => goToPage(page - 1)}
+            className="rounded-lg border border-slate-700 bg-slate-800/60 px-3 py-1.5 text-xs font-medium text-slate-300 transition-colors hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            ← Previous
+          </button>
+          <span className="text-xs text-slate-500">
+            Page {page + 1} of {totalPages}
+          </span>
+          <button
+            disabled={page + 1 >= totalPages}
+            onClick={() => goToPage(page + 1)}
+            className="rounded-lg border border-slate-700 bg-slate-800/60 px-3 py-1.5 text-xs font-medium text-slate-300 transition-colors hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            Next →
+          </button>
+        </div>
+      )}
     </div>
   );
 }

@@ -7,10 +7,10 @@ interface LayerControlProps {
   onOpacity: (v: number) => void;
 }
 
-const LAYER_META: { key: keyof LayerControlProps['layers']; label: string; icon: string }[] = [
+const LAYER_META: { key: keyof LayerControlProps['layers']; label: string; icon: string; hint?: string }[] = [
   { key: 'districts', label: 'District Boundaries', icon: '◎' },
-  { key: 'crime', label: 'Crime Heatmap', icon: '▦' },
-  { key: 'infra', label: 'Infrastructure', icon: '⬡' },
+  { key: 'crime', label: 'Crime Registrations', icon: '▦' },
+  { key: 'infra', label: 'Infrastructure', icon: '⬡', hint: 'Sample dataset (30 projects)' },
 ];
 
 export default function LayerControl({
@@ -37,7 +37,7 @@ export default function LayerControl({
       {open && (
         <div className="mt-2 rounded-xl border border-slate-700/60 bg-slate-900/90 p-4 shadow-xl shadow-black/20 backdrop-blur-sm">
           <div className="space-y-2">
-            {LAYER_META.map(({ key, label, icon }) => (
+            {LAYER_META.map(({ key, label, icon, hint }) => (
               <label
                 key={key}
                 className="flex cursor-pointer items-center gap-3 rounded-lg px-2 py-1.5 transition-colors hover:bg-slate-800/50"
@@ -61,6 +61,7 @@ export default function LayerControl({
                   </svg>
                 </div>
                 <span className="text-[0.78rem] text-slate-300">{icon} {label}</span>
+                {hint && <span className="ml-6 block text-[0.6rem] text-slate-500">{hint}</span>}
               </label>
             ))}
           </div>
