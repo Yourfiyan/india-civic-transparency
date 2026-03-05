@@ -1,0 +1,23 @@
+{
+  "name": "civic-transparency-backend",
+  "version": "1.0.0",
+  "description": "Backend API for India Civic Transparency Platform",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "generate-cache": "node cache/generate-topojson.js"
+  },
+  "dependencies": {
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "pg": "^8.13.0",
+    "pino": "^9.4.0",
+    "topojson-server": "^3.0.1"
+  },
+  "devDependencies": {
+    "pino-pretty": "^11.2.0"
+  }
+}

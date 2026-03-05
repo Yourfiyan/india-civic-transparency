@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+data_pipeline/venv/
+
+# Environment
+.env
+backend/.env
+
+# Data pipeline working directories
+data_pipeline/raw/
+data_pipeline/output/
+
+# Cache
+backend/cache/static/*.topojson
+
+# Logs (keep directory via .gitkeep)
+logs/*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo

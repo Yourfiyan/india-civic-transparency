@@ -1,0 +1,166 @@
+district_name,state,year,category,cases_registered,cases_charge_sheeted,cases_convicted,dataset_source,dataset_version,ingested_at
+Mumbai,Maharashtra,2020,murder,520,480,210,ncrb,seed-v1,2026-01-01T00:00:00Z
+Mumbai,Maharashtra,2020,theft,8500,7200,3100,ncrb,seed-v1,2026-01-01T00:00:00Z
+Mumbai,Maharashtra,2020,kidnapping,1200,980,420,ncrb,seed-v1,2026-01-01T00:00:00Z
+Mumbai,Maharashtra,2020,fraud,3400,2800,1200,ncrb,seed-v1,2026-01-01T00:00:00Z
+Mumbai,Maharashtra,2020,assault,6200,5400,2300,ncrb,seed-v1,2026-01-01T00:00:00Z
+Mumbai,Maharashtra,2021,murder,490,460,200,ncrb,seed-v1,2026-01-01T00:00:00Z
+Mumbai,Maharashtra,2021,theft,8800,7500,3300,ncrb,seed-v1,2026-01-01T00:00:00Z
+Mumbai,Maharashtra,2021,kidnapping,1150,940,410,ncrb,seed-v1,2026-01-01T00:00:00Z
+Mumbai,Maharashtra,2021,fraud,3600,3000,1350,ncrb,seed-v1,2026-01-01T00:00:00Z
+Mumbai,Maharashtra,2021,assault,6400,5600,2400,ncrb,seed-v1,2026-01-01T00:00:00Z
+Mumbai,Maharashtra,2022,murder,470,450,205,ncrb,seed-v1,2026-01-01T00:00:00Z
+Mumbai,Maharashtra,2022,theft,9100,7800,3500,ncrb,seed-v1,2026-01-01T00:00:00Z
+Mumbai,Maharashtra,2022,kidnapping,1100,920,400,ncrb,seed-v1,2026-01-01T00:00:00Z
+Mumbai,Maharashtra,2022,fraud,3800,3200,1450,ncrb,seed-v1,2026-01-01T00:00:00Z
+Mumbai,Maharashtra,2022,assault,6600,5800,2550,ncrb,seed-v1,2026-01-01T00:00:00Z
+Delhi,Delhi,2020,murder,480,440,180,ncrb,seed-v1,2026-01-01T00:00:00Z
+Delhi,Delhi,2020,theft,12000,9800,4200,ncrb,seed-v1,2026-01-01T00:00:00Z
+Delhi,Delhi,2020,kidnapping,4500,3800,1600,ncrb,seed-v1,2026-01-01T00:00:00Z
+Delhi,Delhi,2020,fraud,5200,4100,1800,ncrb,seed-v1,2026-01-01T00:00:00Z
+Delhi,Delhi,2020,assault,7800,6600,2900,ncrb,seed-v1,2026-01-01T00:00:00Z
+Delhi,Delhi,2021,murder,460,430,175,ncrb,seed-v1,2026-01-01T00:00:00Z
+Delhi,Delhi,2021,theft,12500,10200,4500,ncrb,seed-v1,2026-01-01T00:00:00Z
+Delhi,Delhi,2021,kidnapping,4700,4000,1700,ncrb,seed-v1,2026-01-01T00:00:00Z
+Delhi,Delhi,2021,fraud,5500,4400,2000,ncrb,seed-v1,2026-01-01T00:00:00Z
+Delhi,Delhi,2021,assault,8100,6900,3050,ncrb,seed-v1,2026-01-01T00:00:00Z
+Delhi,Delhi,2022,murder,450,420,170,ncrb,seed-v1,2026-01-01T00:00:00Z
+Delhi,Delhi,2022,theft,13000,10800,4800,ncrb,seed-v1,2026-01-01T00:00:00Z
+Delhi,Delhi,2022,kidnapping,4900,4200,1800,ncrb,seed-v1,2026-01-01T00:00:00Z
+Delhi,Delhi,2022,fraud,5800,4700,2200,ncrb,seed-v1,2026-01-01T00:00:00Z
+Delhi,Delhi,2022,assault,8400,7200,3200,ncrb,seed-v1,2026-01-01T00:00:00Z
+Bengaluru Urban,Karnataka,2020,murder,210,195,85,ncrb,seed-v1,2026-01-01T00:00:00Z
+Bengaluru Urban,Karnataka,2020,theft,6500,5400,2300,ncrb,seed-v1,2026-01-01T00:00:00Z
+Bengaluru Urban,Karnataka,2020,kidnapping,800,680,290,ncrb,seed-v1,2026-01-01T00:00:00Z
+Bengaluru Urban,Karnataka,2020,fraud,2800,2300,980,ncrb,seed-v1,2026-01-01T00:00:00Z
+Bengaluru Urban,Karnataka,2020,assault,4200,3600,1550,ncrb,seed-v1,2026-01-01T00:00:00Z
+Bengaluru Urban,Karnataka,2021,murder,200,188,82,ncrb,seed-v1,2026-01-01T00:00:00Z
+Bengaluru Urban,Karnataka,2021,theft,6800,5700,2450,ncrb,seed-v1,2026-01-01T00:00:00Z
+Bengaluru Urban,Karnataka,2021,kidnapping,820,700,310,ncrb,seed-v1,2026-01-01T00:00:00Z
+Bengaluru Urban,Karnataka,2021,fraud,2950,2450,1050,ncrb,seed-v1,2026-01-01T00:00:00Z
+Bengaluru Urban,Karnataka,2021,assault,4400,3800,1650,ncrb,seed-v1,2026-01-01T00:00:00Z
+Bengaluru Urban,Karnataka,2022,murder,195,183,80,ncrb,seed-v1,2026-01-01T00:00:00Z
+Bengaluru Urban,Karnataka,2022,theft,7100,6000,2600,ncrb,seed-v1,2026-01-01T00:00:00Z
+Bengaluru Urban,Karnataka,2022,kidnapping,850,720,320,ncrb,seed-v1,2026-01-01T00:00:00Z
+Bengaluru Urban,Karnataka,2022,fraud,3100,2600,1120,ncrb,seed-v1,2026-01-01T00:00:00Z
+Bengaluru Urban,Karnataka,2022,assault,4600,4000,1750,ncrb,seed-v1,2026-01-01T00:00:00Z
+Chennai,Tamil Nadu,2020,murder,180,165,72,ncrb,seed-v1,2026-01-01T00:00:00Z
+Chennai,Tamil Nadu,2020,theft,5800,4900,2100,ncrb,seed-v1,2026-01-01T00:00:00Z
+Chennai,Tamil Nadu,2020,kidnapping,620,530,230,ncrb,seed-v1,2026-01-01T00:00:00Z
+Chennai,Tamil Nadu,2020,fraud,2200,1800,780,ncrb,seed-v1,2026-01-01T00:00:00Z
+Chennai,Tamil Nadu,2020,assault,3800,3200,1380,ncrb,seed-v1,2026-01-01T00:00:00Z
+Chennai,Tamil Nadu,2021,murder,170,158,70,ncrb,seed-v1,2026-01-01T00:00:00Z
+Chennai,Tamil Nadu,2021,theft,6100,5200,2250,ncrb,seed-v1,2026-01-01T00:00:00Z
+Chennai,Tamil Nadu,2021,kidnapping,640,550,245,ncrb,seed-v1,2026-01-01T00:00:00Z
+Chennai,Tamil Nadu,2021,fraud,2400,2000,860,ncrb,seed-v1,2026-01-01T00:00:00Z
+Chennai,Tamil Nadu,2021,assault,4000,3400,1480,ncrb,seed-v1,2026-01-01T00:00:00Z
+Chennai,Tamil Nadu,2022,murder,165,153,68,ncrb,seed-v1,2026-01-01T00:00:00Z
+Chennai,Tamil Nadu,2022,theft,6400,5500,2400,ncrb,seed-v1,2026-01-01T00:00:00Z
+Chennai,Tamil Nadu,2022,kidnapping,660,570,255,ncrb,seed-v1,2026-01-01T00:00:00Z
+Chennai,Tamil Nadu,2022,fraud,2600,2200,950,ncrb,seed-v1,2026-01-01T00:00:00Z
+Chennai,Tamil Nadu,2022,assault,4200,3600,1580,ncrb,seed-v1,2026-01-01T00:00:00Z
+Kolkata,West Bengal,2020,murder,150,135,58,ncrb,seed-v1,2026-01-01T00:00:00Z
+Kolkata,West Bengal,2020,theft,4200,3500,1500,ncrb,seed-v1,2026-01-01T00:00:00Z
+Kolkata,West Bengal,2020,kidnapping,580,490,210,ncrb,seed-v1,2026-01-01T00:00:00Z
+Kolkata,West Bengal,2020,fraud,1800,1500,650,ncrb,seed-v1,2026-01-01T00:00:00Z
+Kolkata,West Bengal,2020,assault,3200,2700,1160,ncrb,seed-v1,2026-01-01T00:00:00Z
+Kolkata,West Bengal,2021,murder,145,132,57,ncrb,seed-v1,2026-01-01T00:00:00Z
+Kolkata,West Bengal,2021,theft,4400,3700,1600,ncrb,seed-v1,2026-01-01T00:00:00Z
+Kolkata,West Bengal,2021,kidnapping,600,510,220,ncrb,seed-v1,2026-01-01T00:00:00Z
+Kolkata,West Bengal,2021,fraud,1900,1600,700,ncrb,seed-v1,2026-01-01T00:00:00Z
+Kolkata,West Bengal,2021,assault,3400,2900,1260,ncrb,seed-v1,2026-01-01T00:00:00Z
+Kolkata,West Bengal,2022,murder,140,128,56,ncrb,seed-v1,2026-01-01T00:00:00Z
+Kolkata,West Bengal,2022,theft,4600,3900,1700,ncrb,seed-v1,2026-01-01T00:00:00Z
+Kolkata,West Bengal,2022,kidnapping,620,530,230,ncrb,seed-v1,2026-01-01T00:00:00Z
+Kolkata,West Bengal,2022,fraud,2000,1700,750,ncrb,seed-v1,2026-01-01T00:00:00Z
+Kolkata,West Bengal,2022,assault,3600,3100,1360,ncrb,seed-v1,2026-01-01T00:00:00Z
+Pune,Maharashtra,2020,murder,120,110,48,ncrb,seed-v1,2026-01-01T00:00:00Z
+Pune,Maharashtra,2020,theft,5200,4300,1850,ncrb,seed-v1,2026-01-01T00:00:00Z
+Pune,Maharashtra,2020,kidnapping,420,360,155,ncrb,seed-v1,2026-01-01T00:00:00Z
+Pune,Maharashtra,2020,fraud,1900,1600,690,ncrb,seed-v1,2026-01-01T00:00:00Z
+Pune,Maharashtra,2020,assault,3500,3000,1290,ncrb,seed-v1,2026-01-01T00:00:00Z
+Pune,Maharashtra,2021,murder,115,106,47,ncrb,seed-v1,2026-01-01T00:00:00Z
+Pune,Maharashtra,2021,theft,5500,4600,2000,ncrb,seed-v1,2026-01-01T00:00:00Z
+Pune,Maharashtra,2021,kidnapping,440,380,165,ncrb,seed-v1,2026-01-01T00:00:00Z
+Pune,Maharashtra,2021,fraud,2050,1720,740,ncrb,seed-v1,2026-01-01T00:00:00Z
+Pune,Maharashtra,2021,assault,3700,3200,1380,ncrb,seed-v1,2026-01-01T00:00:00Z
+Pune,Maharashtra,2022,murder,112,103,46,ncrb,seed-v1,2026-01-01T00:00:00Z
+Pune,Maharashtra,2022,theft,5800,4900,2150,ncrb,seed-v1,2026-01-01T00:00:00Z
+Pune,Maharashtra,2022,kidnapping,460,400,175,ncrb,seed-v1,2026-01-01T00:00:00Z
+Pune,Maharashtra,2022,fraud,2200,1850,800,ncrb,seed-v1,2026-01-01T00:00:00Z
+Pune,Maharashtra,2022,assault,3900,3400,1480,ncrb,seed-v1,2026-01-01T00:00:00Z
+Jaipur,Rajasthan,2020,murder,280,260,112,ncrb,seed-v1,2026-01-01T00:00:00Z
+Jaipur,Rajasthan,2020,theft,4800,4000,1720,ncrb,seed-v1,2026-01-01T00:00:00Z
+Jaipur,Rajasthan,2020,kidnapping,920,780,335,ncrb,seed-v1,2026-01-01T00:00:00Z
+Jaipur,Rajasthan,2020,fraud,1600,1300,560,ncrb,seed-v1,2026-01-01T00:00:00Z
+Jaipur,Rajasthan,2020,assault,3800,3200,1380,ncrb,seed-v1,2026-01-01T00:00:00Z
+Jaipur,Rajasthan,2021,murder,270,252,110,ncrb,seed-v1,2026-01-01T00:00:00Z
+Jaipur,Rajasthan,2021,theft,5000,4200,1820,ncrb,seed-v1,2026-01-01T00:00:00Z
+Jaipur,Rajasthan,2021,kidnapping,950,810,350,ncrb,seed-v1,2026-01-01T00:00:00Z
+Jaipur,Rajasthan,2021,fraud,1700,1400,600,ncrb,seed-v1,2026-01-01T00:00:00Z
+Jaipur,Rajasthan,2021,assault,4000,3400,1480,ncrb,seed-v1,2026-01-01T00:00:00Z
+Jaipur,Rajasthan,2022,murder,260,245,108,ncrb,seed-v1,2026-01-01T00:00:00Z
+Jaipur,Rajasthan,2022,theft,5200,4400,1920,ncrb,seed-v1,2026-01-01T00:00:00Z
+Jaipur,Rajasthan,2022,kidnapping,980,840,365,ncrb,seed-v1,2026-01-01T00:00:00Z
+Jaipur,Rajasthan,2022,fraud,1800,1500,650,ncrb,seed-v1,2026-01-01T00:00:00Z
+Jaipur,Rajasthan,2022,assault,4200,3600,1580,ncrb,seed-v1,2026-01-01T00:00:00Z
+Lucknow,Uttar Pradesh,2020,murder,320,290,125,ncrb,seed-v1,2026-01-01T00:00:00Z
+Lucknow,Uttar Pradesh,2020,theft,5500,4500,1930,ncrb,seed-v1,2026-01-01T00:00:00Z
+Lucknow,Uttar Pradesh,2020,kidnapping,1100,920,395,ncrb,seed-v1,2026-01-01T00:00:00Z
+Lucknow,Uttar Pradesh,2020,fraud,2100,1700,730,ncrb,seed-v1,2026-01-01T00:00:00Z
+Lucknow,Uttar Pradesh,2020,assault,4500,3800,1630,ncrb,seed-v1,2026-01-01T00:00:00Z
+Lucknow,Uttar Pradesh,2021,murder,310,282,122,ncrb,seed-v1,2026-01-01T00:00:00Z
+Lucknow,Uttar Pradesh,2021,theft,5700,4700,2030,ncrb,seed-v1,2026-01-01T00:00:00Z
+Lucknow,Uttar Pradesh,2021,kidnapping,1120,940,410,ncrb,seed-v1,2026-01-01T00:00:00Z
+Lucknow,Uttar Pradesh,2021,fraud,2250,1850,800,ncrb,seed-v1,2026-01-01T00:00:00Z
+Lucknow,Uttar Pradesh,2021,assault,4700,4000,1730,ncrb,seed-v1,2026-01-01T00:00:00Z
+Lucknow,Uttar Pradesh,2022,murder,300,275,120,ncrb,seed-v1,2026-01-01T00:00:00Z
+Lucknow,Uttar Pradesh,2022,theft,5900,4900,2130,ncrb,seed-v1,2026-01-01T00:00:00Z
+Lucknow,Uttar Pradesh,2022,kidnapping,1140,960,420,ncrb,seed-v1,2026-01-01T00:00:00Z
+Lucknow,Uttar Pradesh,2022,fraud,2400,2000,870,ncrb,seed-v1,2026-01-01T00:00:00Z
+Lucknow,Uttar Pradesh,2022,assault,4900,4200,1830,ncrb,seed-v1,2026-01-01T00:00:00Z
+Ahmedabad,Gujarat,2020,murder,180,165,72,ncrb,seed-v1,2026-01-01T00:00:00Z
+Ahmedabad,Gujarat,2020,theft,4800,4000,1720,ncrb,seed-v1,2026-01-01T00:00:00Z
+Ahmedabad,Gujarat,2020,kidnapping,650,550,240,ncrb,seed-v1,2026-01-01T00:00:00Z
+Ahmedabad,Gujarat,2020,fraud,2000,1650,710,ncrb,seed-v1,2026-01-01T00:00:00Z
+Ahmedabad,Gujarat,2020,assault,3900,3300,1420,ncrb,seed-v1,2026-01-01T00:00:00Z
+Ahmedabad,Gujarat,2021,murder,175,160,70,ncrb,seed-v1,2026-01-01T00:00:00Z
+Ahmedabad,Gujarat,2021,theft,5000,4200,1820,ncrb,seed-v1,2026-01-01T00:00:00Z
+Ahmedabad,Gujarat,2021,kidnapping,670,570,250,ncrb,seed-v1,2026-01-01T00:00:00Z
+Ahmedabad,Gujarat,2021,fraud,2150,1780,770,ncrb,seed-v1,2026-01-01T00:00:00Z
+Ahmedabad,Gujarat,2021,assault,4100,3500,1520,ncrb,seed-v1,2026-01-01T00:00:00Z
+Ahmedabad,Gujarat,2022,murder,170,156,68,ncrb,seed-v1,2026-01-01T00:00:00Z
+Ahmedabad,Gujarat,2022,theft,5200,4400,1920,ncrb,seed-v1,2026-01-01T00:00:00Z
+Ahmedabad,Gujarat,2022,kidnapping,690,590,260,ncrb,seed-v1,2026-01-01T00:00:00Z
+Ahmedabad,Gujarat,2022,fraud,2300,1900,820,ncrb,seed-v1,2026-01-01T00:00:00Z
+Ahmedabad,Gujarat,2022,assault,4300,3700,1620,ncrb,seed-v1,2026-01-01T00:00:00Z
+Hyderabad,Telangana,2020,murder,160,148,64,ncrb,seed-v1,2026-01-01T00:00:00Z
+Hyderabad,Telangana,2020,theft,5500,4600,1980,ncrb,seed-v1,2026-01-01T00:00:00Z
+Hyderabad,Telangana,2020,kidnapping,520,440,190,ncrb,seed-v1,2026-01-01T00:00:00Z
+Hyderabad,Telangana,2020,fraud,2400,2000,860,ncrb,seed-v1,2026-01-01T00:00:00Z
+Hyderabad,Telangana,2020,assault,4000,3400,1460,ncrb,seed-v1,2026-01-01T00:00:00Z
+Hyderabad,Telangana,2021,murder,155,143,62,ncrb,seed-v1,2026-01-01T00:00:00Z
+Hyderabad,Telangana,2021,theft,5700,4800,2080,ncrb,seed-v1,2026-01-01T00:00:00Z
+Hyderabad,Telangana,2021,kidnapping,540,460,200,ncrb,seed-v1,2026-01-01T00:00:00Z
+Hyderabad,Telangana,2021,fraud,2550,2130,920,ncrb,seed-v1,2026-01-01T00:00:00Z
+Hyderabad,Telangana,2021,assault,4200,3600,1560,ncrb,seed-v1,2026-01-01T00:00:00Z
+Hyderabad,Telangana,2022,murder,150,139,60,ncrb,seed-v1,2026-01-01T00:00:00Z
+Hyderabad,Telangana,2022,theft,5900,5000,2180,ncrb,seed-v1,2026-01-01T00:00:00Z
+Hyderabad,Telangana,2022,kidnapping,560,480,210,ncrb,seed-v1,2026-01-01T00:00:00Z
+Hyderabad,Telangana,2022,fraud,2700,2260,980,ncrb,seed-v1,2026-01-01T00:00:00Z
+Hyderabad,Telangana,2022,assault,4400,3800,1660,ncrb,seed-v1,2026-01-01T00:00:00Z
+Patna,Bihar,2020,murder,350,310,130,ncrb,seed-v1,2026-01-01T00:00:00Z
+Patna,Bihar,2020,theft,3800,3100,1330,ncrb,seed-v1,2026-01-01T00:00:00Z
+Patna,Bihar,2020,kidnapping,1500,1250,535,ncrb,seed-v1,2026-01-01T00:00:00Z
+Patna,Bihar,2020,fraud,1200,980,420,ncrb,seed-v1,2026-01-01T00:00:00Z
+Patna,Bihar,2020,assault,4800,4000,1720,ncrb,seed-v1,2026-01-01T00:00:00Z
+Patna,Bihar,2021,murder,340,302,128,ncrb,seed-v1,2026-01-01T00:00:00Z
+Patna,Bihar,2021,theft,3900,3200,1380,ncrb,seed-v1,2026-01-01T00:00:00Z
+Patna,Bihar,2021,kidnapping,1520,1270,545,ncrb,seed-v1,2026-01-01T00:00:00Z
+Patna,Bihar,2021,fraud,1250,1020,440,ncrb,seed-v1,2026-01-01T00:00:00Z
+Patna,Bihar,2021,assault,4950,4120,1770,ncrb,seed-v1,2026-01-01T00:00:00Z
+Patna,Bihar,2022,murder,330,295,126,ncrb,seed-v1,2026-01-01T00:00:00Z
+Patna,Bihar,2022,theft,4000,3300,1430,ncrb,seed-v1,2026-01-01T00:00:00Z
+Patna,Bihar,2022,kidnapping,1540,1290,555,ncrb,seed-v1,2026-01-01T00:00:00Z
+Patna,Bihar,2022,fraud,1300,1060,460,ncrb,seed-v1,2026-01-01T00:00:00Z
+Patna,Bihar,2022,assault,5100,4250,1830,ncrb,seed-v1,2026-01-01T00:00:00Z
