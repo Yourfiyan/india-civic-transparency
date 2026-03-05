@@ -5,8 +5,13 @@
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
 }
 
-/* ---------- maplibre overrides ---------- */
-.maplibregl-popup-content {
+/* ---------- leaflet overrides ---------- */
+.leaflet-container {
+  background: #1e293b !important;
+  font-family: 'Inter', sans-serif !important;
+}
+
+.district-tooltip {
   background: rgba(15, 23, 42, 0.92) !important;
   color: #e2e8f0 !important;
   border-radius: 8px !important;
@@ -18,31 +23,27 @@
   border: 1px solid rgba(99, 102, 241, 0.3) !important;
 }
 
-.maplibregl-popup-tip {
+.district-tooltip::before {
   border-top-color: rgba(15, 23, 42, 0.92) !important;
 }
 
-.maplibregl-popup-close-button {
-  display: none !important;
-}
-
-.maplibregl-ctrl-group {
-  background: rgba(15, 23, 42, 0.85) !important;
+.leaflet-control-zoom {
   border: 1px solid rgba(99, 102, 241, 0.25) !important;
   border-radius: 8px !important;
+  overflow: hidden;
 }
 
-.maplibregl-ctrl-group button {
+.leaflet-control-zoom a {
+  background: rgba(15, 23, 42, 0.85) !important;
+  color: #e2e8f0 !important;
   width: 32px !important;
   height: 32px !important;
+  line-height: 32px !important;
+  border-bottom: 1px solid rgba(99, 102, 241, 0.15) !important;
 }
 
-.maplibregl-ctrl-group button + button {
-  border-top: 1px solid rgba(99, 102, 241, 0.15) !important;
-}
-
-.maplibregl-ctrl-group button span {
-  filter: invert(1) !important;
+.leaflet-control-zoom a:hover {
+  background: rgba(30, 41, 59, 0.95) !important;
 }
 
 /* ---------- scrollbar ---------- */
