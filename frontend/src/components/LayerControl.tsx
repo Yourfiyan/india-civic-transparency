@@ -22,7 +22,7 @@ export default function LayerControl({
   const [open, setOpen] = useState(true);
 
   return (
-    <div className="absolute right-4 top-4 z-10 w-56">
+    <div className="absolute right-4 top-4 w-56" style={{ zIndex: 1000 }}>
       <button
         onClick={() => setOpen(!open)}
         className="flex w-full items-center justify-between rounded-xl border border-slate-700/60 bg-slate-900/90 px-4 py-2.5 text-xs font-semibold text-slate-200 shadow-xl shadow-black/20 backdrop-blur-sm transition-colors hover:border-indigo-500/30"
