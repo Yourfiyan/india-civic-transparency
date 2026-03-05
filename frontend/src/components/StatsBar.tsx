@@ -17,8 +17,8 @@ const CARDS: {
   color: string;
 }[] = [
   { key: 'districts', label: 'Districts', icon: '◎', color: 'from-indigo-600/20 to-indigo-600/5 border-indigo-500/20 text-indigo-400' },
-  { key: 'cases', label: 'Court Cases', icon: '⚖', color: 'from-amber-600/20 to-amber-600/5 border-amber-500/20 text-amber-400' },
-  { key: 'crimeRecords', label: 'Crime Summaries', icon: '▦', color: 'from-rose-600/20 to-rose-600/5 border-rose-500/20 text-rose-400' },
+  { key: 'cases', label: 'Supreme Court Cases', icon: '⚖', color: 'from-amber-600/20 to-amber-600/5 border-amber-500/20 text-amber-400' },
+  { key: 'crimeRecords', label: 'Crime Registrations', icon: '▦', color: 'from-rose-600/20 to-rose-600/5 border-rose-500/20 text-rose-400' },
   { key: 'avgScore', label: 'Avg Score', icon: '★', color: 'from-emerald-600/20 to-emerald-600/5 border-emerald-500/20 text-emerald-400' },
 ];
 

@@ -11,7 +11,7 @@ type SidebarTab = 'home' | 'cases' | 'district' | 'analytics';
 
 const NAV_ITEMS: { key: SidebarTab; label: string; icon: string }[] = [
   { key: 'home', label: 'Home', icon: '⌂' },
-  { key: 'cases', label: 'Cases', icon: '⚖' },
+  { key: 'cases', label: 'Court Cases', icon: '⚖' },
   { key: 'district', label: 'Districts', icon: '◎' },
   { key: 'analytics', label: 'Analytics', icon: '▤' },
 ];

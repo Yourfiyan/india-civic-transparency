@@ -207,23 +207,28 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
           const data = await res.json();
           if (cancelled) return;
 
-          const maxCases = Math.max(...data.districts.map((d: any) => d.total_cases), 1);
+          const maxCases = Math.max(...data.districts.map((d: any) => d.total_cases ?? 0), 1);
           const group = L.layerGroup();
 
           for (const d of data.districts) {
-            const radius = 6 + (d.total_cases / maxCases) * 24;
+            const cases = d.total_cases ?? 0;
+            const convicted = d.total_convicted ?? 0;
+            const hasData = cases > 0;
+            const radius = hasData ? 6 + (cases / maxCases) * 24 : 4;
             L.circleMarker([d.lat, d.lng], {
               radius,
-              fillColor: '#ef4444',
-              fillOpacity: 0.25 + (d.total_cases / maxCases) * 0.45,
-              color: '#fca5a5',
+              fillColor: hasData ? '#ef4444' : '#64748b',
+              fillOpacity: hasData ? 0.25 + (cases / maxCases) * 0.45 : 0.35,
+              color: hasData ? '#fca5a5' : '#94a3b8',
               weight: 1,
               interactive: true,
             })
               .bindTooltip(
-                `<strong>${d.name}</strong><br/>` +
-                `<span style="font-size:11px;color:#fca5a5">Cases: ${Number(d.total_cases).toLocaleString()}</span><br/>` +
-                `<span style="font-size:11px;color:#86efac">Convicted: ${Number(d.total_convicted).toLocaleString()}</span>`,
+                hasData
+                  ? `<strong>${d.name}</strong><br/>` +
+                    `<span style="font-size:11px;color:#fca5a5">Crime Registrations: ${Number(cases).toLocaleString()}</span><br/>` +
+                    `<span style="font-size:11px;color:#86efac">Convicted: ${Number(convicted).toLocaleString()}</span>`
+                  : `<strong>${d.name}</strong><br/><span style="font-size:11px;color:#94a3b8">No crime data available</span>`,
                 { sticky: true, direction: 'top' },
               )
               .addTo(group);
@@ -256,9 +261,7 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
 
           for (const p of data.projects) {
             const color = statusColor[p.status] ?? '#94a3b8';
-            // Offset markers slightly when multiple projects at same centroid
-            const jitter = (Math.random() - 0.5) * 0.15;
-            L.circleMarker([p.lat + jitter, p.lng + jitter], {
+            L.circleMarker([p.lat, p.lng], {
               radius: 5,
               fillColor: color,
               fillOpacity: 0.8,

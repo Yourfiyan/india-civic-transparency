@@ -70,10 +70,10 @@ router.get('/geo', async (req, res, next) => {
       `SELECT d.id, d.name, d.state,
               ST_X(ST_Centroid(d.geom)) AS lng,
               ST_Y(ST_Centroid(d.geom)) AS lat,
-              SUM(cs.cases_registered)::int AS total_cases,
-              SUM(cs.cases_convicted)::int AS total_convicted
+              COALESCE(SUM(cs.cases_registered), 0)::int AS total_cases,
+              COALESCE(SUM(cs.cases_convicted), 0)::int AS total_convicted
        FROM districts d
-       JOIN crime_stats cs ON cs.district_id = d.id
+       LEFT JOIN crime_stats cs ON cs.district_id = d.id
        WHERE d.geom IS NOT NULL
        GROUP BY d.id, d.name, d.state
        ORDER BY total_cases DESC`
