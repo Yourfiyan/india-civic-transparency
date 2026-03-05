@@ -51,7 +51,7 @@ async function generate() {
       })),
     };
 
-    const topo = topology({ districts: geojson }, 1e5);
+    const topo = topology({ districts: geojson }, 1e7);
 
     fs.mkdirSync(CACHE_DIR, { recursive: true });
     fs.writeFileSync(OUTPUT_FILE, JSON.stringify(topo));

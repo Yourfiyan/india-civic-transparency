@@ -30,6 +30,8 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
     const containerRef = useRef<HTMLDivElement>(null);
     const mapRef = useRef<L.Map | null>(null);
     const districtLayerRef = useRef<L.GeoJSON | null>(null);
+    const crimeLayerRef = useRef<L.LayerGroup | null>(null);
+    const infraLayerRef = useRef<L.LayerGroup | null>(null);
     const selectedIdRef = useRef<number | null>(null);
     const opacityRef = useRef(opacity);
     const onDistrictClickRef = useRef(onDistrictClick);
@@ -52,6 +54,8 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
         mapRef.current.remove();
         mapRef.current = null;
         districtLayerRef.current = null;
+        crimeLayerRef.current = null;
+        infraLayerRef.current = null;
       }
 
       let cancelled = false;               // ← cancellation flag for async work
@@ -194,6 +198,92 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
         }
       })();
 
+      /* ── Load crime heatmap data ── */
+      (async () => {
+        try {
+          const res = await fetch('/api/crime/geo');
+          if (cancelled) return;
+          if (!res.ok) throw new Error(`Crime geo ${res.status}`);
+          const data = await res.json();
+          if (cancelled) return;
+
+          const maxCases = Math.max(...data.districts.map((d: any) => d.total_cases), 1);
+          const group = L.layerGroup();
+
+          for (const d of data.districts) {
+            const radius = 6 + (d.total_cases / maxCases) * 24;
+            L.circleMarker([d.lat, d.lng], {
+              radius,
+              fillColor: '#ef4444',
+              fillOpacity: 0.25 + (d.total_cases / maxCases) * 0.45,
+              color: '#fca5a5',
+              weight: 1,
+              interactive: true,
+            })
+              .bindTooltip(
+                `<strong>${d.name}</strong><br/>` +
+                `<span style="font-size:11px;color:#fca5a5">Cases: ${Number(d.total_cases).toLocaleString()}</span><br/>` +
+                `<span style="font-size:11px;color:#86efac">Convicted: ${Number(d.total_convicted).toLocaleString()}</span>`,
+                { sticky: true, direction: 'top' },
+              )
+              .addTo(group);
+          }
+
+          crimeLayerRef.current = group;
+          // Don't add to map by default — toggle handles it
+          console.log('[MapView] Crime layer ready:', data.districts.length, 'districts');
+        } catch (err) {
+          if (cancelled) return;
+          console.warn('[MapView] Crime geo load failed:', err);
+        }
+      })();
+
+      /* ── Load infrastructure data ── */
+      (async () => {
+        try {
+          const res = await fetch('/api/infrastructure/geo');
+          if (cancelled) return;
+          if (!res.ok) throw new Error(`Infra geo ${res.status}`);
+          const data = await res.json();
+          if (cancelled) return;
+
+          const statusColor: Record<string, string> = {
+            completed: '#22c55e',
+            in_progress: '#eab308',
+            sanctioned: '#f97316',
+          };
+          const group = L.layerGroup();
+
+          for (const p of data.projects) {
+            const color = statusColor[p.status] ?? '#94a3b8';
+            // Offset markers slightly when multiple projects at same centroid
+            const jitter = (Math.random() - 0.5) * 0.15;
+            L.circleMarker([p.lat + jitter, p.lng + jitter], {
+              radius: 5,
+              fillColor: color,
+              fillOpacity: 0.8,
+              color: '#e2e8f0',
+              weight: 0.5,
+              interactive: true,
+            })
+              .bindTooltip(
+                `<strong>${p.project_name}</strong><br/>` +
+                `<span style="font-size:11px;color:#94a3b8">${p.district_name}, ${p.state}</span><br/>` +
+                `<span style="font-size:11px;color:${color}">${p.status.replace('_', ' ')} · ${p.completion_pct ?? 0}%</span>` +
+                (p.sanctioned_cost ? `<br/><span style="font-size:11px;color:#cbd5e1">₹${(p.sanctioned_cost / 1e7).toFixed(1)} Cr</span>` : ''),
+                { sticky: true, direction: 'top' },
+              )
+              .addTo(group);
+          }
+
+          infraLayerRef.current = group;
+          console.log('[MapView] Infra layer ready:', data.projects.length, 'projects');
+        } catch (err) {
+          if (cancelled) return;
+          console.warn('[MapView] Infra geo load failed:', err);
+        }
+      })();
+
       /* ── ResizeObserver ── */
       const ro = new ResizeObserver(() => map.invalidateSize());
       ro.observe(containerRef.current);
@@ -204,6 +294,8 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
         map.remove();
         mapRef.current = null;
         districtLayerRef.current = null;
+        crimeLayerRef.current = null;
+        infraLayerRef.current = null;
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -220,6 +312,32 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
         if (map.hasLayer(layer)) map.removeLayer(layer);
       }
     }, [layers.districts]);
+
+    /* ── Toggle crime layer visibility ── */
+    useEffect(() => {
+      const map = mapRef.current;
+      const layer = crimeLayerRef.current;
+      if (!map || !layer) return;
+
+      if (layers.crime) {
+        if (!map.hasLayer(layer)) map.addLayer(layer);
+      } else {
+        if (map.hasLayer(layer)) map.removeLayer(layer);
+      }
+    }, [layers.crime]);
+
+    /* ── Toggle infra layer visibility ── */
+    useEffect(() => {
+      const map = mapRef.current;
+      const layer = infraLayerRef.current;
+      if (!map || !layer) return;
+
+      if (layers.infra) {
+        if (!map.hasLayer(layer)) map.addLayer(layer);
+      } else {
+        if (map.hasLayer(layer)) map.removeLayer(layer);
+      }
+    }, [layers.infra]);
 
     /* ── Update opacity ── */
     useEffect(() => {

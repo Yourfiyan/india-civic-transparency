@@ -63,6 +63,28 @@ router.get('/', async (req, res, next) => {
   }
 });
 
+// GET /api/crime/geo — aggregated crime counts with district centroids
+router.get('/geo', async (req, res, next) => {
+  try {
+    const result = await db.query(
+      `SELECT d.id, d.name, d.state,
+              ST_X(ST_Centroid(d.geom)) AS lng,
+              ST_Y(ST_Centroid(d.geom)) AS lat,
+              SUM(cs.cases_registered)::int AS total_cases,
+              SUM(cs.cases_convicted)::int AS total_convicted
+       FROM districts d
+       JOIN crime_stats cs ON cs.district_id = d.id
+       WHERE d.geom IS NOT NULL
+       GROUP BY d.id, d.name, d.state
+       ORDER BY total_cases DESC`
+    );
+    res.json({ districts: result.rows });
+  } catch (err) {
+    logger.error({ err }, 'Failed to fetch crime geo data');
+    next(err);
+  }
+});
+
 // GET /api/crime/summary — aggregated by state and year
 router.get('/summary', async (req, res, next) => {
   try {
