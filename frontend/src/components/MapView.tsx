@@ -1,4 +1,4 @@
-import { useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
+import { useEffect, useRef, useState, forwardRef, useImperativeHandle } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import * as topojson from 'topojson-client';
@@ -32,7 +32,11 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
     const districtLayerRef = useRef<L.GeoJSON | null>(null);
     const selectedIdRef = useRef<number | null>(null);
     const opacityRef = useRef(opacity);
+    const onDistrictClickRef = useRef(onDistrictClick);
     opacityRef.current = opacity;
+    onDistrictClickRef.current = onDistrictClick;
+
+    const [mapError, setMapError] = useState<string | null>(null);
 
     useImperativeHandle(ref, () => ({
       getMap: () => mapRef.current,
@@ -40,7 +44,17 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
 
     /* ── Initialise Leaflet map (Canvas renderer — no WebGL needed) ── */
     useEffect(() => {
-      if (!containerRef.current || mapRef.current) return;
+      if (!containerRef.current) return;
+
+      /* Prevent StrictMode double-init: if a map already exists on this
+         DOM node, destroy it first so we get a clean slate. */
+      if (mapRef.current) {
+        mapRef.current.remove();
+        mapRef.current = null;
+        districtLayerRef.current = null;
+      }
+
+      let cancelled = false;               // ← cancellation flag for async work
 
       const map = L.map(containerRef.current, {
         center: [22.5, 78.9],
@@ -55,6 +69,14 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
       });
 
       L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+      /* Try adding a dark tile layer — fails gracefully in Colab */
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
+        subdomains: 'abcd',
+        maxZoom: 19,
+        errorTileUrl: '',           // don't show broken-image icons
+      }).addTo(map);
+
       mapRef.current = map;
 
       /* ── Load district data ── */
@@ -64,6 +86,9 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
             fetch('/api/districts/topojson'),
             fetch('/api/analytics/district-score').catch(() => null),
           ]);
+
+          /* ── Bail out if component unmounted (StrictMode cleanup) ── */
+          if (cancelled) return;
 
           if (!topoRes.ok) throw new Error(`TopoJSON ${topoRes.status}`);
           const topo: Topology = await topoRes.json();
@@ -87,6 +112,9 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
             const fid = Number(f.properties?.id ?? f.properties?.district_id);
             f.properties = { ...f.properties, _score: scoreMap.get(fid) ?? 50 };
           }
+
+          /* ── Final cancelled check before DOM mutation ── */
+          if (cancelled) return;
 
           /* ── Create GeoJSON layer ── */
           const geoLayer = L.geoJSON(geojson, {
@@ -138,7 +166,7 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
                 }
               });
 
-              /* Click */
+              /* Click — use ref so closure always has latest callback */
               layer.on('click', () => {
                 geoLayer.eachLayer((l) => geoLayer.resetStyle(l as L.Path));
                 selectedIdRef.current = id;
@@ -148,7 +176,7 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
                   color: '#fbbf24',
                   weight: 2.5,
                 });
-                onDistrictClick(id, name);
+                onDistrictClickRef.current(id, name);
               });
             },
           }).addTo(map);
@@ -160,7 +188,9 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
 
           console.log('[MapView] Leaflet: Districts loaded:', geojson.features.length);
         } catch (err) {
+          if (cancelled) return;
           console.error('[MapView] Failed to load districts:', err);
+          setMapError('Failed to load district data. Please refresh.');
         }
       })();
 
@@ -169,6 +199,7 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
       ro.observe(containerRef.current);
 
       return () => {
+        cancelled = true;                   // ← abort in-flight async work
         ro.disconnect();
         map.remove();
         mapRef.current = null;
@@ -204,7 +235,21 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
         ref={containerRef}
         className="absolute inset-0"
         style={{ background: '#1e293b' }}
-      />
+      >
+        {mapError && (
+          <div className="absolute inset-0 z-[1000] flex items-center justify-center bg-slate-900/80">
+            <div className="rounded-lg bg-slate-800 px-6 py-4 text-center shadow-lg">
+              <p className="text-sm text-rose-400">{mapError}</p>
+              <button
+                onClick={() => window.location.reload()}
+                className="mt-3 rounded bg-indigo-600 px-4 py-1.5 text-xs font-medium text-white hover:bg-indigo-500"
+              >
+                Reload Page
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
     );
   },
 );
