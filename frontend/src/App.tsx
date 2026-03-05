@@ -24,7 +24,7 @@ export default function App() {
     crime: false,
     infra: false,
   });
-  const [opacity, setOpacity] = useState(0.25);
+  const [opacity, setOpacity] = useState(0.7);
   const [selectedDistrict, setSelectedDistrict] = useState<{
     id: number;
     name: string;
