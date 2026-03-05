@@ -19,6 +19,37 @@ const INDIA_BOUNDS: [[number, number], [number, number]] = [
   [97.5, 37.5],
 ];
 
+/* Fully self-contained style — no external tile/glyph/sprite requests */
+const BLANK_STYLE: maplibregl.StyleSpecification = {
+  version: 8,
+  name: 'blank-dark',
+  sources: {},
+  layers: [
+    {
+      id: 'background',
+      type: 'background',
+      paint: { 'background-color': '#0f172a' },
+    },
+  ],
+};
+
+/* Score → color interpolation (red 0 → yellow 50 → green 100) */
+function scoreColor(score: number): string {
+  const t = Math.max(0, Math.min(100, score)) / 100;
+  if (t < 0.5) {
+    const s = t * 2;
+    const r = Math.round(239 * (1 - s) + 234 * s);
+    const g = Math.round(68 * (1 - s) + 179 * s);
+    const b = Math.round(68 * (1 - s) + 8 * s);
+    return `rgb(${r},${g},${b})`;
+  }
+  const s = (t - 0.5) * 2;
+  const r = Math.round(234 * (1 - s) + 34 * s);
+  const g = Math.round(179 * (1 - s) + 197 * s);
+  const b = Math.round(8 * (1 - s) + 94 * s);
+  return `rgb(${r},${g},${b})`;
+}
+
 const MapView = forwardRef<MapViewHandle, MapViewProps>(
   ({ layers, opacity, onDistrictClick }, ref) => {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -34,34 +65,23 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
     useEffect(() => {
       if (!containerRef.current) return;
 
+      const container = containerRef.current;
+
       const map = new maplibregl.Map({
-        container: containerRef.current,
-        style: {
-          version: 8,
-          sources: {
-            'carto-light': {
-              type: 'raster',
-              tiles: ['https://basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'],
-              tileSize: 256,
-              attribution: '&copy; <a href="https://carto.com">CARTO</a>',
-            },
-          },
-          layers: [
-            {
-              id: 'carto-light-layer',
-              type: 'raster',
-              source: 'carto-light',
-              minzoom: 0,
-              maxzoom: 20,
-            },
-          ],
-        },
+        container,
+        style: BLANK_STYLE,
         center: [78.9, 22.5],
         zoom: 4,
-        minZoom: 4,
+        minZoom: 3,
         maxZoom: 10,
         maxBounds: INDIA_BOUNDS,
       });
+
+      /* ResizeObserver to keep canvas in sync with flex container */
+      const ro = new ResizeObserver(() => {
+        map.resize();
+      });
+      ro.observe(container);
 
       map.addControl(new maplibregl.NavigationControl(), 'bottom-right');
       mapRef.current = map;
@@ -73,9 +93,10 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
       });
 
       map.on('load', async () => {
+        /* Load district boundaries */
         try {
           const res = await fetch('/api/districts/topojson');
-          if (!res.ok) return;
+          if (!res.ok) throw new Error('TopoJSON unavailable');
           const topo: Topology = await res.json();
           const objectKey = Object.keys(topo.objects)[0];
           const geojson = topojson.feature(
@@ -83,16 +104,35 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
             topo.objects[objectKey] as GeometryCollection
           );
 
+          /* Fetch scores and merge into GeoJSON properties */
+          try {
+            const scoreRes = await fetch('/api/analytics/district-score');
+            if (scoreRes.ok) {
+              const scoreData = await scoreRes.json();
+              const scoreMap = new Map<number, number>();
+              for (const d of scoreData.districts ?? []) {
+                scoreMap.set(Number(d.district_id ?? d.id), Number(d.score));
+              }
+              if ('features' in geojson) {
+                for (const f of (geojson as GeoJSON.FeatureCollection).features) {
+                  const fid = Number(f.properties?.id ?? f.properties?.district_id);
+                  const sc = scoreMap.get(fid) ?? 50;
+                  f.properties = { ...f.properties, _score: sc, _color: scoreColor(sc) };
+                }
+              }
+            }
+          } catch { /* scores optional */ }
+
           map.addSource('districts', { type: 'geojson', data: geojson });
 
-          /* base fill */
+          /* base fill — colored by score */
           map.addLayer({
             id: 'districts-fill',
             type: 'fill',
             source: 'districts',
             paint: {
-              'fill-color': '#6366f1',
-              'fill-opacity': 0.15,
+              'fill-color': ['coalesce', ['get', '_color'], '#6366f1'],
+              'fill-opacity': opacity,
             },
           });
 
@@ -102,9 +142,9 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
             type: 'line',
             source: 'districts',
             paint: {
-              'line-color': '#818cf8',
-              'line-width': 0.8,
-              'line-opacity': 0.6,
+              'line-color': '#94a3b8',
+              'line-width': 1.5,
+              'line-opacity': 0.8,
             },
           });
 
@@ -115,7 +155,7 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
             source: 'districts',
             paint: {
               'fill-color': '#818cf8',
-              'fill-opacity': 0.35,
+              'fill-opacity': 0.5,
             },
             filter: ['==', ['get', 'id'], ''],
           });
@@ -127,7 +167,7 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
             source: 'districts',
             paint: {
               'fill-color': '#f59e0b',
-              'fill-opacity': 0.45,
+              'fill-opacity': 0.55,
             },
             filter: ['==', ['get', 'id'], ''],
           });
@@ -138,9 +178,27 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
             source: 'districts',
             paint: {
               'line-color': '#fbbf24',
-              'line-width': 2,
+              'line-width': 2.5,
             },
             filter: ['==', ['get', 'id'], ''],
+          });
+
+          /* district name labels */
+          map.addLayer({
+            id: 'districts-labels',
+            type: 'symbol',
+            source: 'districts',
+            layout: {
+              'text-field': ['get', 'name'],
+              'text-size': 11,
+              'text-anchor': 'center',
+              'text-allow-overlap': false,
+            },
+            paint: {
+              'text-color': '#e2e8f0',
+              'text-halo-color': '#0f172a',
+              'text-halo-width': 1.5,
+            },
           });
 
           /* infrastructure markers (hidden by default) */
@@ -149,11 +207,11 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
             type: 'circle',
             source: 'districts',
             paint: {
-              'circle-radius': 4,
+              'circle-radius': 5,
               'circle-color': '#10b981',
               'circle-stroke-width': 1.5,
               'circle-stroke-color': '#065f46',
-              'circle-opacity': 0.8,
+              'circle-opacity': 0.9,
             },
             layout: { visibility: 'none' },
           });
@@ -165,6 +223,7 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
             const props = feature.properties;
             const id = props?.id ?? props?.district_id;
             const name = props?.name ?? 'Unknown';
+            const sc = props?._score;
 
             if (id !== hoveredId.current) {
               hoveredId.current = id;
@@ -172,9 +231,12 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
             }
 
             map.getCanvas().style.cursor = 'pointer';
+            const html = sc != null
+              ? `<strong>${name}</strong><br/><span style="font-size:11px;color:#94a3b8">Score: ${Number(sc).toFixed(1)}</span>`
+              : `<strong>${name}</strong>`;
             hoverPopup.current
               ?.setLngLat(e.lngLat)
-              .setHTML(`<strong>${name}</strong>`)
+              .setHTML(html)
               .addTo(map);
           });
 
@@ -199,11 +261,12 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
             }
           });
         } catch {
-          /* TopoJSON not available */
+          /* TopoJSON not available — map still shows dark background */
         }
       });
 
       return () => {
+        ro.disconnect();
         hoverPopup.current?.remove();
         map.remove();
         mapRef.current = null;
@@ -217,12 +280,11 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
       if (!map || !map.isStyleLoaded()) return;
       const vis = (on: boolean): 'visible' | 'none' => on ? 'visible' : 'none';
 
-      if (map.getLayer('districts-fill'))
-        map.setLayoutProperty('districts-fill', 'visibility', vis(layers.districts));
-      if (map.getLayer('districts-line'))
-        map.setLayoutProperty('districts-line', 'visibility', vis(layers.districts));
-      if (map.getLayer('districts-hover'))
-        map.setLayoutProperty('districts-hover', 'visibility', vis(layers.districts));
+      const districtLayers = ['districts-fill', 'districts-line', 'districts-hover', 'districts-labels'];
+      for (const id of districtLayers) {
+        if (map.getLayer(id))
+          map.setLayoutProperty(id, 'visibility', vis(layers.districts));
+      }
       if (map.getLayer('infra-markers'))
         map.setLayoutProperty('infra-markers', 'visibility', vis(layers.infra));
     }, [layers]);

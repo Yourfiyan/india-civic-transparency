@@ -82,6 +82,7 @@ export default function App() {
             <InfoPanel
               districtId={selectedDistrict?.id ?? null}
               districtName={selectedDistrict?.name ?? ''}
+              onDistrictClick={handleDistrictClick}
             />
           )}
           {tab === 'analytics' && <AnalyticsDashboard />}

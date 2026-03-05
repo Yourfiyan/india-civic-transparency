@@ -1,15 +1,37 @@
 import { useEffect, useState } from 'react';
-import { getDistrictDetail } from '../api';
-import type { DistrictDetail } from '../types';
+import { getDistrictDetail, getDistricts, getDistrictScores } from '../api';
+import type { District, DistrictDetail } from '../types';
 
 interface InfoPanelProps {
   districtId: number | null;
   districtName: string;
+  onDistrictClick?: (id: number, name: string) => void;
 }
 
-export default function InfoPanel({ districtId, districtName }: InfoPanelProps) {
+export default function InfoPanel({ districtId, districtName, onDistrictClick }: InfoPanelProps) {
   const [detail, setDetail] = useState<DistrictDetail | null>(null);
   const [loading, setLoading] = useState(false);
+  const [allDistricts, setAllDistricts] = useState<(District & { score?: number })[]>([]);
+  const [listLoading, setListLoading] = useState(false);
+
+  /* Load district list when no district selected */
+  useEffect(() => {
+    if (districtId) return;
+    setListLoading(true);
+    Promise.all([
+      getDistricts(),
+      getDistrictScores().catch(() => null),
+    ]).then(([dRes, sRes]) => {
+      const scoreMap = new Map<number, number>();
+      for (const s of sRes?.districts ?? []) {
+        scoreMap.set(Number(s.district_id), Number(s.score));
+      }
+      setAllDistricts(
+        dRes.districts.map((d) => ({ ...d, score: scoreMap.get(d.id) }))
+      );
+    }).catch(() => setAllDistricts([]))
+      .finally(() => setListLoading(false));
+  }, [districtId]);
 
   useEffect(() => {
     if (!districtId) { setDetail(null); return; }
@@ -22,9 +44,35 @@ export default function InfoPanel({ districtId, districtName }: InfoPanelProps) 
 
   if (!districtId) {
     return (
-      <div className="flex flex-col items-center justify-center py-12 text-center">
-        <span className="mb-3 text-3xl">🗺</span>
-        <p className="text-sm text-slate-400">Click a district on the map to view details.</p>
+      <div className="space-y-3">
+        <p className="text-xs text-slate-400">Select a district from the map or the list below.</p>
+        {listLoading && (
+          <div className="flex items-center justify-center py-8">
+            <div className="h-5 w-5 animate-spin rounded-full border-2 border-indigo-500 border-t-transparent" />
+            <span className="ml-2 text-xs text-slate-400">Loading districts…</span>
+          </div>
+        )}
+        {allDistricts.map((d) => (
+          <button
+            key={d.id}
+            onClick={() => onDistrictClick?.(d.id, d.name)}
+            className="flex w-full items-center justify-between rounded-xl border border-slate-700/50 bg-slate-800/40 p-3 text-left transition-all duration-150 hover:border-indigo-500/30 hover:bg-slate-800/70"
+          >
+            <div>
+              <span className="text-sm font-semibold text-slate-100">{d.name}</span>
+              <span className="ml-2 text-xs text-slate-500">{d.state}</span>
+            </div>
+            {d.score != null && (
+              <span className={`rounded-lg px-2 py-0.5 text-xs font-bold ${
+                d.score >= 60 ? 'bg-emerald-900/40 text-emerald-300'
+                  : d.score >= 40 ? 'bg-amber-900/40 text-amber-300'
+                  : 'bg-rose-900/40 text-rose-300'
+              }`}>
+                {d.score.toFixed(1)}
+              </span>
+            )}
+          </button>
+        ))}
       </div>
     );
   }
