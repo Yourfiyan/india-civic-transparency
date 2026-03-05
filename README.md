@@ -5,12 +5,12 @@ A full-stack civic data platform that visualizes Indian public datasets to help 
 ## Architecture
 
 ```
-┌─────────────┐        ┌──────────────┐       ┌───────────────────┐
-│   Frontend  │ ────>  │   Backend    │ ────> │  PostgreSQL +     │
-│  React/Vite │        │  Express API │       │  PostGIS          │
-│  MapLibre GL│ <────  │  pino logger │ <──── │  dataset_ingestion│
-│  TopoJSON   │        │              │       │  _log             │
-└─────────────┘        └──────────────┘       └───────────────────┘
+┌─────────────┐     ┌──────────────┐     ┌───────────────────┐
+│   Frontend   │────▶│   Backend    │────▶│  PostgreSQL +     │
+│  React/Vite  │     │  Express API │     │  PostGIS          │
+│  Leaflet     │◀────│  pino logger │◀────│  dataset_ingestion│
+│  Tailwind CSS│     │              │     │  _log             │
+└─────────────┘     └──────────────┘     └───────────────────┘
                            ▲
                            │ cache/static/
                            │ india-districts.topojson
@@ -28,8 +28,8 @@ A full-stack civic data platform that visualizes Indian public datasets to help 
 
 | Layer | Technology |
 |-------|-----------|
-| Frontend | React 18, TypeScript, Vite, MapLibre GL JS |
-| Backend | Node.js, Express |
+| Frontend | React 18, TypeScript, Vite, Leaflet 1.9, Tailwind CSS 4.2 |
+| Backend | Node.js, Express 4.21 |
 | Database | PostgreSQL 16, PostGIS 3.4 |
 | Data Pipeline | Python, DuckDB, geopandas, boto3 |
 | Logging | pino (backend), Python logging (ETL) |
@@ -37,10 +37,11 @@ A full-stack civic data platform that visualizes Indian public datasets to help 
 
 ## Features
 
-- **Interactive map of India** — zoom to districts, click for detail
-- **Supreme Court judgments** — search and browse case metadata
-- **Crime statistics** — district-level NCRB crime data choropleth
-- **Infrastructure layer** — PMGSY road/bridge project tracking
+- **Interactive map of India** — Leaflet Canvas 2D renderer, zoom to districts, click for detail
+- **Supreme Court cases** — paginated search and browse with case metadata
+- **Crime registrations layer** — district-level NCRB data as proportional circle markers with "no data" indicators
+- **Infrastructure layer** — status-colored markers (completed/in-progress/sanctioned) at district centroids
+- **Layer controls** — toggle districts, crime, and infrastructure layers with opacity slider
 - **Analytics dashboard** — judicial delay trends, crime-vs-justice comparison, composite district scores
 - **Dataset versioning** — every record tracks source, version, and ingestion timestamp
 - **Structured logging** — JSON logs for backend API and ETL pipeline
@@ -126,8 +127,10 @@ make etl
 | GET | `/api/districts/topojson` | TopoJSON boundaries (cached) |
 | GET | `/api/districts/:id` | District detail with geometry |
 | GET | `/api/crime` | Crime statistics (filterable) |
+| GET | `/api/crime/geo` | Crime counts with district centroids |
 | GET | `/api/crime/summary` | Aggregated crime by state/year |
 | GET | `/api/infrastructure` | Infrastructure projects |
+| GET | `/api/infrastructure/geo` | Projects with district centroids |
 | GET | `/api/datasets` | Ingested dataset versions |
 | GET | `/api/datasets/:name` | Version history for a dataset |
 
@@ -184,7 +187,7 @@ The `dataset_ingestion_log` table provides an audit trail of all ingestions.
 india-civic-transparency/
 ├── backend/          Express API server
 ├── data_pipeline/    Python ETL scripts
-├── frontend/         React + MapLibre application
+├── frontend/         React + Leaflet + Tailwind CSS application
 ├── logs/             Structured log output
 ├── scripts/          Developer automation
 └── seed_data/        Demo datasets for instant setup
