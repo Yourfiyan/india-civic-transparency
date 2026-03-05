@@ -1,6 +1,6 @@
 import { useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
-import maplibregl from 'maplibre-gl';
-import 'maplibre-gl/dist/maplibre-gl.css';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 import * as topojson from 'topojson-client';
 import type { Topology, GeometryCollection } from 'topojson-specification';
 
@@ -11,268 +11,200 @@ interface MapViewProps {
 }
 
 export interface MapViewHandle {
-  getMap: () => maplibregl.Map | null;
+  getMap: () => L.Map | null;
 }
 
-const INDIA_BOUNDS: [[number, number], [number, number]] = [
-  [68.0, 6.0],
-  [97.5, 37.5],
-];
-
-/* Fully self-contained style — zero external network requests */
-const BLANK_STYLE: maplibregl.StyleSpecification = {
-  version: 8,
-  name: 'blank-dark',
-  sources: {},
-  layers: [
-    {
-      id: 'background',
-      type: 'background',
-      paint: { 'background-color': '#1e293b' },   /* slate-800 — visible contrast */
-    },
-  ],
-};
+/** Score → fill color (red 0 → yellow 50 → green 100) */
+function scoreColor(score: number): string {
+  const t = Math.max(0, Math.min(100, score)) / 100;
+  if (t < 0.5) {
+    const s = t * 2;
+    return `rgb(${Math.round(239 * (1 - s) + 234 * s)},${Math.round(68 * (1 - s) + 179 * s)},${Math.round(68 * (1 - s) + 8 * s)})`;
+  }
+  const s = (t - 0.5) * 2;
+  return `rgb(${Math.round(234 * (1 - s) + 34 * s)},${Math.round(179 * (1 - s) + 197 * s)},${Math.round(8 * (1 - s) + 94 * s)})`;
+}
 
 const MapView = forwardRef<MapViewHandle, MapViewProps>(
   ({ layers, opacity, onDistrictClick }, ref) => {
     const containerRef = useRef<HTMLDivElement>(null);
-    const mapRef = useRef<maplibregl.Map | null>(null);
-    const hoverPopup = useRef<maplibregl.Popup | null>(null);
-    const hoveredId = useRef<string | number | null>(null);
+    const mapRef = useRef<L.Map | null>(null);
+    const districtLayerRef = useRef<L.GeoJSON | null>(null);
+    const selectedIdRef = useRef<number | null>(null);
+    const opacityRef = useRef(opacity);
+    opacityRef.current = opacity;
 
     useImperativeHandle(ref, () => ({
       getMap: () => mapRef.current,
     }));
 
-    /* initialise map */
+    /* ── Initialise Leaflet map (Canvas renderer — no WebGL needed) ── */
     useEffect(() => {
-      if (!containerRef.current) return;
+      if (!containerRef.current || mapRef.current) return;
 
-      const container = containerRef.current;
-
-      const map = new maplibregl.Map({
-        container,
-        style: BLANK_STYLE,
-        center: [78.9, 22.5],
-        zoom: 4,
-        minZoom: 3,
+      const map = L.map(containerRef.current, {
+        center: [22.5, 78.9],
+        zoom: 5,
+        minZoom: 4,
         maxZoom: 10,
-        maxBounds: INDIA_BOUNDS,
+        renderer: L.canvas(),
+        zoomControl: false,
+        attributionControl: false,
+        maxBounds: L.latLngBounds([6.0, 68.0], [37.5, 97.5]),
+        maxBoundsViscosity: 1.0,
       });
 
-      /* ResizeObserver to keep canvas in sync with flex container */
-      const ro = new ResizeObserver(() => {
-        if (mapRef.current) mapRef.current.resize();
-      });
-      ro.observe(container);
-
-      map.addControl(new maplibregl.NavigationControl(), 'bottom-right');
+      L.control.zoom({ position: 'bottomright' }).addTo(map);
       mapRef.current = map;
 
-      hoverPopup.current = new maplibregl.Popup({
-        closeButton: false,
-        closeOnClick: false,
-        offset: 12,
-      });
-
-      map.on('load', async () => {
+      /* ── Load district data ── */
+      (async () => {
         try {
-          /* ── Load district boundaries ── */
-          const res = await fetch('/api/districts/topojson');
-          if (!res.ok) throw new Error(`TopoJSON ${res.status}`);
-          const topo: Topology = await res.json();
+          const [topoRes, scoreRes] = await Promise.all([
+            fetch('/api/districts/topojson'),
+            fetch('/api/analytics/district-score').catch(() => null),
+          ]);
+
+          if (!topoRes.ok) throw new Error(`TopoJSON ${topoRes.status}`);
+          const topo: Topology = await topoRes.json();
           const objectKey = Object.keys(topo.objects)[0];
           const geojson = topojson.feature(
             topo,
             topo.objects[objectKey] as GeometryCollection,
-          );
+          ) as GeoJSON.FeatureCollection;
 
-          /* ── Merge scores into properties as numeric _score ── */
-          try {
-            const scoreRes = await fetch('/api/analytics/district-score');
-            if (scoreRes.ok) {
-              const scoreData = await scoreRes.json();
-              const scoreMap = new Map<number, number>();
-              for (const d of scoreData.districts ?? []) {
-                scoreMap.set(Number(d.district_id ?? d.id), Number(d.score));
-              }
-              if ('features' in geojson) {
-                for (const f of (geojson as GeoJSON.FeatureCollection).features) {
-                  const fid = Number(f.properties?.id ?? f.properties?.district_id);
-                  f.properties = { ...f.properties, _score: scoreMap.get(fid) ?? 50 };
+          /* Build score lookup */
+          const scoreMap = new Map<number, number>();
+          if (scoreRes?.ok) {
+            const scoreData = await scoreRes.json();
+            for (const d of scoreData.districts ?? []) {
+              scoreMap.set(Number(d.district_id ?? d.id), Number(d.score));
+            }
+          }
+
+          /* Merge scores */
+          for (const f of geojson.features) {
+            const fid = Number(f.properties?.id ?? f.properties?.district_id);
+            f.properties = { ...f.properties, _score: scoreMap.get(fid) ?? 50 };
+          }
+
+          /* ── Create GeoJSON layer ── */
+          const geoLayer = L.geoJSON(geojson, {
+            style: (feature) => {
+              const sc = feature?.properties?._score ?? 50;
+              return {
+                fillColor: scoreColor(sc),
+                fillOpacity: opacityRef.current,
+                color: '#cbd5e1',
+                weight: 1.5,
+                opacity: 0.9,
+              };
+            },
+            onEachFeature: (feature, layer) => {
+              const props = feature.properties;
+              const id = Number(props?.id ?? props?.district_id);
+              const name = props?.name ?? 'Unknown';
+              const sc = props?._score;
+
+              /* Tooltip */
+              const tip = sc != null
+                ? `<strong>${name}</strong><br/><span style="font-size:11px;color:#94a3b8">Score: ${Number(sc).toFixed(1)}</span>`
+                : `<strong>${name}</strong>`;
+              layer.bindTooltip(tip, {
+                sticky: true,
+                direction: 'top',
+                className: 'district-tooltip',
+              });
+
+              /* Hover */
+              layer.on('mouseover', () => {
+                (layer as L.Path).setStyle({
+                  fillColor: '#a5b4fc',
+                  fillOpacity: 0.7,
+                  weight: 2,
+                });
+              });
+
+              layer.on('mouseout', () => {
+                if (selectedIdRef.current === id) {
+                  (layer as L.Path).setStyle({
+                    fillColor: '#f59e0b',
+                    fillOpacity: 0.75,
+                    color: '#fbbf24',
+                    weight: 2.5,
+                  });
+                } else {
+                  geoLayer.resetStyle(layer as L.Path);
                 }
-              }
-            }
-          } catch { /* scores optional */ }
+              });
 
-          map.addSource('districts', { type: 'geojson', data: geojson });
-
-          /* ── Fill — native interpolate on _score (no external colors) ── */
-          map.addLayer({
-            id: 'districts-fill',
-            type: 'fill',
-            source: 'districts',
-            paint: {
-              'fill-color': [
-                'interpolate', ['linear'],
-                ['coalesce', ['get', '_score'], 50],
-                0,   '#ef4444',
-                30,  '#f97316',
-                50,  '#eab308',
-                70,  '#84cc16',
-                100, '#22c55e',
-              ],
-              'fill-opacity': 0.7,
+              /* Click */
+              layer.on('click', () => {
+                geoLayer.eachLayer((l) => geoLayer.resetStyle(l as L.Path));
+                selectedIdRef.current = id;
+                (layer as L.Path).setStyle({
+                  fillColor: '#f59e0b',
+                  fillOpacity: 0.75,
+                  color: '#fbbf24',
+                  weight: 2.5,
+                });
+                onDistrictClick(id, name);
+              });
             },
-          });
+          }).addTo(map);
 
-          /* ── Border ── */
-          map.addLayer({
-            id: 'districts-line',
-            type: 'line',
-            source: 'districts',
-            paint: {
-              'line-color': '#cbd5e1',
-              'line-width': 1.5,
-              'line-opacity': 0.9,
-            },
-          });
+          districtLayerRef.current = geoLayer;
 
-          /* ── Hover highlight ── */
-          map.addLayer({
-            id: 'districts-hover',
-            type: 'fill',
-            source: 'districts',
-            paint: {
-              'fill-color': '#a5b4fc',
-              'fill-opacity': 0.6,
-            },
-            filter: ['==', ['get', 'id'], ''],
-          });
+          /* Fit to India bounds */
+          map.fitBounds(geoLayer.getBounds(), { padding: [20, 20] });
 
-          /* ── Click highlight ── */
-          map.addLayer({
-            id: 'districts-selected',
-            type: 'fill',
-            source: 'districts',
-            paint: {
-              'fill-color': '#f59e0b',
-              'fill-opacity': 0.65,
-            },
-            filter: ['==', ['get', 'id'], ''],
-          });
-
-          map.addLayer({
-            id: 'districts-selected-line',
-            type: 'line',
-            source: 'districts',
-            paint: {
-              'line-color': '#fbbf24',
-              'line-width': 2.5,
-            },
-            filter: ['==', ['get', 'id'], ''],
-          });
-
-          /* ── Infra markers (hidden by default) ── */
-          map.addLayer({
-            id: 'infra-markers',
-            type: 'circle',
-            source: 'districts',
-            paint: {
-              'circle-radius': 5,
-              'circle-color': '#10b981',
-              'circle-stroke-width': 1.5,
-              'circle-stroke-color': '#065f46',
-              'circle-opacity': 0.9,
-            },
-            layout: { visibility: 'none' },
-          });
-
-          /* ── Hover events ── */
-          map.on('mousemove', 'districts-fill', (e) => {
-            const feature = e.features?.[0];
-            if (!feature) return;
-            const props = feature.properties;
-            const id = props?.id ?? props?.district_id;
-            const name = props?.name ?? 'Unknown';
-            const sc = props?._score;
-
-            if (id !== hoveredId.current) {
-              hoveredId.current = id;
-              map.setFilter('districts-hover', ['==', ['get', 'id'], id]);
-            }
-
-            map.getCanvas().style.cursor = 'pointer';
-            const html = sc != null
-              ? `<strong>${name}</strong><br/><span style="font-size:11px;color:#94a3b8">Score: ${Number(sc).toFixed(1)}</span>`
-              : `<strong>${name}</strong>`;
-            hoverPopup.current
-              ?.setLngLat(e.lngLat)
-              .setHTML(html)
-              .addTo(map);
-          });
-
-          map.on('mouseleave', 'districts-fill', () => {
-            hoveredId.current = null;
-            map.setFilter('districts-hover', ['==', ['get', 'id'], '']);
-            map.getCanvas().style.cursor = '';
-            hoverPopup.current?.remove();
-          });
-
-          /* ── Click ── */
-          map.on('click', 'districts-fill', (e) => {
-            const feature = e.features?.[0];
-            if (!feature) return;
-            const props = feature.properties;
-            const id = props?.id ?? props?.district_id;
-            const name = props?.name ?? 'Unknown';
-            if (id) {
-              map.setFilter('districts-selected', ['==', ['get', 'id'], id]);
-              map.setFilter('districts-selected-line', ['==', ['get', 'id'], id]);
-              onDistrictClick(Number(id), name);
-            }
-          });
-
-          console.log('[MapView] Districts loaded:', (geojson as GeoJSON.FeatureCollection).features?.length ?? 0);
+          console.log('[MapView] Leaflet: Districts loaded:', geojson.features.length);
         } catch (err) {
           console.error('[MapView] Failed to load districts:', err);
         }
-      });
+      })();
+
+      /* ── ResizeObserver ── */
+      const ro = new ResizeObserver(() => map.invalidateSize());
+      ro.observe(containerRef.current);
 
       return () => {
         ro.disconnect();
-        hoverPopup.current?.remove();
         map.remove();
         mapRef.current = null;
+        districtLayerRef.current = null;
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    /* toggle layers */
+    /* ── Toggle district layer visibility ── */
     useEffect(() => {
       const map = mapRef.current;
-      if (!map || !map.isStyleLoaded()) return;
-      const vis = (on: boolean): 'visible' | 'none' => on ? 'visible' : 'none';
+      const layer = districtLayerRef.current;
+      if (!map || !layer) return;
 
-      const districtLayers = ['districts-fill', 'districts-line', 'districts-hover'];
-      for (const id of districtLayers) {
-        if (map.getLayer(id))
-          map.setLayoutProperty(id, 'visibility', vis(layers.districts));
+      if (layers.districts) {
+        if (!map.hasLayer(layer)) map.addLayer(layer);
+      } else {
+        if (map.hasLayer(layer)) map.removeLayer(layer);
       }
-      if (map.getLayer('infra-markers'))
-        map.setLayoutProperty('infra-markers', 'visibility', vis(layers.infra));
-    }, [layers]);
+    }, [layers.districts]);
 
-    /* opacity */
+    /* ── Update opacity ── */
     useEffect(() => {
-      const map = mapRef.current;
-      if (!map || !map.isStyleLoaded()) return;
-      if (map.getLayer('districts-fill'))
-        map.setPaintProperty('districts-fill', 'fill-opacity', opacity);
+      const layer = districtLayerRef.current;
+      if (!layer) return;
+      layer.eachLayer((l) => {
+        (l as L.Path).setStyle({ fillOpacity: opacity });
+      });
     }, [opacity]);
 
     return (
-      <div ref={containerRef} className="absolute inset-0" />
+      <div
+        ref={containerRef}
+        className="absolute inset-0"
+        style={{ background: '#1e293b' }}
+      />
     );
   },
 );
