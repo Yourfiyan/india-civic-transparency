@@ -3,103 +3,1523 @@
   "features": [
     {
       "type": "Feature",
-      "properties": { "name": "Mumbai", "name_normalized": "mumbai", "state": "Maharashtra", "state_normalized": "maharashtra", "census_code": "MH-MU", "population": 12442373, "area_sq_km": 603, "dataset_source": "datameet", "dataset_version": "seed-v1", "ingested_at": "2026-01-01T00:00:00Z" },
-      "geometry": { "type": "MultiPolygon", "coordinates": [[[[72.77, 19.25], [72.98, 19.25], [72.98, 18.89], [72.77, 18.89], [72.77, 19.25]]]] }
+      "properties": {
+        "name": "Mumbai",
+        "name_normalized": "mumbai",
+        "state": "Maharashtra",
+        "state_normalized": "maharashtra",
+        "census_code": "MH-MU",
+        "population": 12442373,
+        "area_sq_km": 603,
+        "dataset_source": "datameet",
+        "dataset_version": "seed-v1",
+        "ingested_at": "2026-01-01T00:00:00Z"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                73.3715,
+                19.07
+              ],
+              [
+                73.2289,
+                19.2631
+              ],
+              [
+                73.0972,
+                19.4338
+              ],
+              [
+                72.875,
+                19.483
+              ],
+              [
+                72.6198,
+                19.4878
+              ],
+              [
+                72.4404,
+                19.3072
+              ],
+              [
+                72.3423,
+                19.07
+              ],
+              [
+                72.5134,
+                18.8727
+              ],
+              [
+                72.6423,
+                18.689
+              ],
+              [
+                72.875,
+                18.6831
+              ],
+              [
+                73.0932,
+                18.7128
+              ],
+              [
+                73.2884,
+                18.8444
+              ],
+              [
+                73.3715,
+                19.07
+              ]
+            ]
+          ]
+        ]
+      }
     },
     {
       "type": "Feature",
-      "properties": { "name": "Delhi", "name_normalized": "delhi", "state": "Delhi", "state_normalized": "delhi", "census_code": "DL-DL", "population": 11034555, "area_sq_km": 1484, "dataset_source": "datameet", "dataset_version": "seed-v1", "ingested_at": "2026-01-01T00:00:00Z" },
-      "geometry": { "type": "MultiPolygon", "coordinates": [[[[76.84, 28.88], [77.35, 28.88], [77.35, 28.40], [76.84, 28.40], [76.84, 28.88]]]] }
+      "properties": {
+        "name": "Delhi",
+        "name_normalized": "delhi",
+        "state": "Delhi",
+        "state_normalized": "delhi",
+        "census_code": "DL-DL",
+        "population": 11034555,
+        "area_sq_km": 1484,
+        "dataset_source": "datameet",
+        "dataset_version": "seed-v1",
+        "ingested_at": "2026-01-01T00:00:00Z"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                77.5353,
+                28.64
+              ],
+              [
+                77.4993,
+                28.8449
+              ],
+              [
+                77.3632,
+                29.0476
+              ],
+              [
+                77.095,
+                29.0965
+              ],
+              [
+                76.8599,
+                28.9974
+              ],
+              [
+                76.6386,
+                28.8713
+              ],
+              [
+                76.5341,
+                28.64
+              ],
+              [
+                76.7163,
+                28.4481
+              ],
+              [
+                76.8148,
+                28.2141
+              ],
+              [
+                77.095,
+                28.1628
+              ],
+              [
+                77.3393,
+                28.2686
+              ],
+              [
+                77.4935,
+                28.4381
+              ],
+              [
+                77.5353,
+                28.64
+              ]
+            ]
+          ]
+        ]
+      }
     },
     {
       "type": "Feature",
-      "properties": { "name": "Bengaluru Urban", "name_normalized": "bengaluru urban", "state": "Karnataka", "state_normalized": "karnataka", "census_code": "KA-BU", "population": 9621551, "area_sq_km": 2196, "dataset_source": "datameet", "dataset_version": "seed-v1", "ingested_at": "2026-01-01T00:00:00Z" },
-      "geometry": { "type": "MultiPolygon", "coordinates": [[[[77.40, 13.15], [77.80, 13.15], [77.80, 12.80], [77.40, 12.80], [77.40, 13.15]]]] }
+      "properties": {
+        "name": "Bengaluru Urban",
+        "name_normalized": "bengaluru urban",
+        "state": "Karnataka",
+        "state_normalized": "karnataka",
+        "census_code": "KA-BU",
+        "population": 9621551,
+        "area_sq_km": 2196,
+        "dataset_source": "datameet",
+        "dataset_version": "seed-v1",
+        "ingested_at": "2026-01-01T00:00:00Z"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                78.1257,
+                12.975
+              ],
+              [
+                77.9807,
+                13.1892
+              ],
+              [
+                77.8029,
+                13.3174
+              ],
+              [
+                77.6,
+                13.371
+              ],
+              [
+                77.3448,
+                13.4058
+              ],
+              [
+                77.1872,
+                13.2072
+              ],
+              [
+                77.0952,
+                12.975
+              ],
+              [
+                77.1721,
+                12.7343
+              ],
+              [
+                77.3664,
+                12.5807
+              ],
+              [
+                77.6,
+                12.4606
+              ],
+              [
+                77.8227,
+                12.5991
+              ],
+              [
+                78.0066,
+                12.7463
+              ],
+              [
+                78.1257,
+                12.975
+              ]
+            ]
+          ]
+        ]
+      }
     },
     {
       "type": "Feature",
-      "properties": { "name": "Chennai", "name_normalized": "chennai", "state": "Tamil Nadu", "state_normalized": "tamil nadu", "census_code": "TN-CH", "population": 7088000, "area_sq_km": 426, "dataset_source": "datameet", "dataset_version": "seed-v1", "ingested_at": "2026-01-01T00:00:00Z" },
-      "geometry": { "type": "MultiPolygon", "coordinates": [[[[80.15, 13.20], [80.35, 13.20], [80.35, 12.90], [80.15, 12.90], [80.15, 13.20]]]] }
+      "properties": {
+        "name": "Chennai",
+        "name_normalized": "chennai",
+        "state": "Tamil Nadu",
+        "state_normalized": "tamil nadu",
+        "census_code": "TN-CH",
+        "population": 7088000,
+        "area_sq_km": 426,
+        "dataset_source": "datameet",
+        "dataset_version": "seed-v1",
+        "ingested_at": "2026-01-01T00:00:00Z"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                80.7581,
+                13.05
+              ],
+              [
+                80.6647,
+                13.2832
+              ],
+              [
+                80.5063,
+                13.4824
+              ],
+              [
+                80.25,
+                13.5109
+              ],
+              [
+                80.0046,
+                13.464
+              ],
+              [
+                79.9041,
+                13.2445
+              ],
+              [
+                79.8254,
+                13.05
+              ],
+              [
+                79.8749,
+                12.839
+              ],
+              [
+                80.0479,
+                12.7091
+              ],
+              [
+                80.25,
+                12.6357
+              ],
+              [
+                80.4535,
+                12.7066
+              ],
+              [
+                80.6238,
+                12.8398
+              ],
+              [
+                80.7581,
+                13.05
+              ]
+            ]
+          ]
+        ]
+      }
     },
     {
       "type": "Feature",
-      "properties": { "name": "Kolkata", "name_normalized": "kolkata", "state": "West Bengal", "state_normalized": "west bengal", "census_code": "WB-KO", "population": 4496694, "area_sq_km": 205, "dataset_source": "datameet", "dataset_version": "seed-v1", "ingested_at": "2026-01-01T00:00:00Z" },
-      "geometry": { "type": "MultiPolygon", "coordinates": [[[[88.25, 22.65], [88.50, 22.65], [88.50, 22.45], [88.25, 22.45], [88.25, 22.65]]]] }
+      "properties": {
+        "name": "Kolkata",
+        "name_normalized": "kolkata",
+        "state": "West Bengal",
+        "state_normalized": "west bengal",
+        "census_code": "WB-KO",
+        "population": 4496694,
+        "area_sq_km": 205,
+        "dataset_source": "datameet",
+        "dataset_version": "seed-v1",
+        "ingested_at": "2026-01-01T00:00:00Z"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                88.8826,
+                22.55
+              ],
+              [
+                88.7803,
+                22.7661
+              ],
+              [
+                88.6094,
+                22.9249
+              ],
+              [
+                88.375,
+                22.9612
+              ],
+              [
+                88.1482,
+                22.9128
+              ],
+              [
+                87.8973,
+                22.8047
+              ],
+              [
+                87.8656,
+                22.55
+              ],
+              [
+                87.9388,
+                22.3174
+              ],
+              [
+                88.1552,
+                22.1984
+              ],
+              [
+                88.375,
+                22.0686
+              ],
+              [
+                88.5942,
+                22.1993
+              ],
+              [
+                88.7821,
+                22.3329
+              ],
+              [
+                88.8826,
+                22.55
+              ]
+            ]
+          ]
+        ]
+      }
     },
     {
       "type": "Feature",
-      "properties": { "name": "Pune", "name_normalized": "pune", "state": "Maharashtra", "state_normalized": "maharashtra", "census_code": "MH-PU", "population": 7276000, "area_sq_km": 15643, "dataset_source": "datameet", "dataset_version": "seed-v1", "ingested_at": "2026-01-01T00:00:00Z" },
-      "geometry": { "type": "MultiPolygon", "coordinates": [[[[73.70, 18.70], [74.10, 18.70], [74.10, 18.35], [73.70, 18.35], [73.70, 18.70]]]] }
+      "properties": {
+        "name": "Pune",
+        "name_normalized": "pune",
+        "state": "Maharashtra",
+        "state_normalized": "maharashtra",
+        "census_code": "MH-PU",
+        "population": 7276000,
+        "area_sq_km": 15643,
+        "dataset_source": "datameet",
+        "dataset_version": "seed-v1",
+        "ingested_at": "2026-01-01T00:00:00Z"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                74.6689,
+                18.525
+              ],
+              [
+                74.505,
+                18.8562
+              ],
+              [
+                74.241,
+                19.085
+              ],
+              [
+                73.9,
+                19.1959
+              ],
+              [
+                73.5303,
+                19.1322
+              ],
+              [
+                73.2713,
+                18.8692
+              ],
+              [
+                73.284,
+                18.525
+              ],
+              [
+                73.4009,
+                18.2518
+              ],
+              [
+                73.5833,
+                18.0049
+              ],
+              [
+                73.9,
+                17.9336
+              ],
+              [
+                74.2062,
+                18.0222
+              ],
+              [
+                74.5578,
+                18.1649
+              ],
+              [
+                74.6689,
+                18.525
+              ]
+            ]
+          ]
+        ]
+      }
     },
     {
       "type": "Feature",
-      "properties": { "name": "Jaipur", "name_normalized": "jaipur", "state": "Rajasthan", "state_normalized": "rajasthan", "census_code": "RJ-JP", "population": 6626178, "area_sq_km": 11152, "dataset_source": "datameet", "dataset_version": "seed-v1", "ingested_at": "2026-01-01T00:00:00Z" },
-      "geometry": { "type": "MultiPolygon", "coordinates": [[[[75.60, 27.20], [76.00, 27.20], [76.00, 26.70], [75.60, 26.70], [75.60, 27.20]]]] }
+      "properties": {
+        "name": "Jaipur",
+        "name_normalized": "jaipur",
+        "state": "Rajasthan",
+        "state_normalized": "rajasthan",
+        "census_code": "RJ-JP",
+        "population": 6626178,
+        "area_sq_km": 11152,
+        "dataset_source": "datameet",
+        "dataset_version": "seed-v1",
+        "ingested_at": "2026-01-01T00:00:00Z"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                76.4701,
+                26.95
+              ],
+              [
+                76.2925,
+                27.2035
+              ],
+              [
+                76.1151,
+                27.4365
+              ],
+              [
+                75.8,
+                27.47
+              ],
+              [
+                75.4615,
+                27.4727
+              ],
+              [
+                75.285,
+                27.2151
+              ],
+              [
+                75.2403,
+                26.95
+              ],
+              [
+                75.3182,
+                26.702
+              ],
+              [
+                75.4934,
+                26.4766
+              ],
+              [
+                75.8,
+                26.4514
+              ],
+              [
+                76.1087,
+                26.4734
+              ],
+              [
+                76.3837,
+                26.6496
+              ],
+              [
+                76.4701,
+                26.95
+              ]
+            ]
+          ]
+        ]
+      }
     },
     {
       "type": "Feature",
-      "properties": { "name": "Lucknow", "name_normalized": "lucknow", "state": "Uttar Pradesh", "state_normalized": "uttar pradesh", "census_code": "UP-LU", "population": 4589838, "area_sq_km": 2528, "dataset_source": "datameet", "dataset_version": "seed-v1", "ingested_at": "2026-01-01T00:00:00Z" },
-      "geometry": { "type": "MultiPolygon", "coordinates": [[[[80.80, 27.00], [81.10, 27.00], [81.10, 26.70], [80.80, 26.70], [80.80, 27.00]]]] }
+      "properties": {
+        "name": "Lucknow",
+        "name_normalized": "lucknow",
+        "state": "Uttar Pradesh",
+        "state_normalized": "uttar pradesh",
+        "census_code": "UP-LU",
+        "population": 4589838,
+        "area_sq_km": 2528,
+        "dataset_source": "datameet",
+        "dataset_version": "seed-v1",
+        "ingested_at": "2026-01-01T00:00:00Z"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                81.4396,
+                26.85
+              ],
+              [
+                81.3504,
+                27.0563
+              ],
+              [
+                81.2401,
+                27.2983
+              ],
+              [
+                80.95,
+                27.3017
+              ],
+              [
+                80.7285,
+                27.1922
+              ],
+              [
+                80.5722,
+                27.0446
+              ],
+              [
+                80.5042,
+                26.85
+              ],
+              [
+                80.496,
+                26.6162
+              ],
+              [
+                80.6754,
+                26.4257
+              ],
+              [
+                80.95,
+                26.4101
+              ],
+              [
+                81.1694,
+                26.511
+              ],
+              [
+                81.3717,
+                26.6328
+              ],
+              [
+                81.4396,
+                26.85
+              ]
+            ]
+          ]
+        ]
+      }
     },
     {
       "type": "Feature",
-      "properties": { "name": "Ahmedabad", "name_normalized": "ahmedabad", "state": "Gujarat", "state_normalized": "gujarat", "census_code": "GJ-AH", "population": 7650000, "area_sq_km": 8107, "dataset_source": "datameet", "dataset_version": "seed-v1", "ingested_at": "2026-01-01T00:00:00Z" },
-      "geometry": { "type": "MultiPolygon", "coordinates": [[[[72.40, 23.20], [72.80, 23.20], [72.80, 22.85], [72.40, 22.85], [72.40, 23.20]]]] }
+      "properties": {
+        "name": "Ahmedabad",
+        "name_normalized": "ahmedabad",
+        "state": "Gujarat",
+        "state_normalized": "gujarat",
+        "census_code": "GJ-AH",
+        "population": 7650000,
+        "area_sq_km": 8107,
+        "dataset_source": "datameet",
+        "dataset_version": "seed-v1",
+        "ingested_at": "2026-01-01T00:00:00Z"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                73.1713,
+                23.025
+              ],
+              [
+                73.0344,
+                23.2558
+              ],
+              [
+                72.8838,
+                23.4773
+              ],
+              [
+                72.6,
+                23.5322
+              ],
+              [
+                72.3878,
+                23.3633
+              ],
+              [
+                72.1408,
+                23.269
+              ],
+              [
+                72.0756,
+                23.025
+              ],
+              [
+                72.1646,
+                22.7936
+              ],
+              [
+                72.3688,
+                22.6564
+              ],
+              [
+                72.6,
+                22.548
+              ],
+              [
+                72.8197,
+                22.6749
+              ],
+              [
+                73.0222,
+                22.8007
+              ],
+              [
+                73.1713,
+                23.025
+              ]
+            ]
+          ]
+        ]
+      }
     },
     {
       "type": "Feature",
-      "properties": { "name": "Hyderabad", "name_normalized": "hyderabad", "state": "Telangana", "state_normalized": "telangana", "census_code": "TG-HY", "population": 7749334, "area_sq_km": 650, "dataset_source": "datameet", "dataset_version": "seed-v1", "ingested_at": "2026-01-01T00:00:00Z" },
-      "geometry": { "type": "MultiPolygon", "coordinates": [[[[78.30, 17.55], [78.60, 17.55], [78.60, 17.25], [78.30, 17.25], [78.30, 17.55]]]] }
+      "properties": {
+        "name": "Hyderabad",
+        "name_normalized": "hyderabad",
+        "state": "Telangana",
+        "state_normalized": "telangana",
+        "census_code": "TG-HY",
+        "population": 7749334,
+        "area_sq_km": 650,
+        "dataset_source": "datameet",
+        "dataset_version": "seed-v1",
+        "ingested_at": "2026-01-01T00:00:00Z"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                78.9155,
+                17.4
+              ],
+              [
+                78.9145,
+                17.6559
+              ],
+              [
+                78.7126,
+                17.8341
+              ],
+              [
+                78.45,
+                17.8185
+              ],
+              [
+                78.2139,
+                17.7902
+              ],
+              [
+                78.0806,
+                17.6035
+              ],
+              [
+                77.9195,
+                17.4
+              ],
+              [
+                77.9958,
+                17.1497
+              ],
+              [
+                78.2282,
+                17.0335
+              ],
+              [
+                78.45,
+                16.9308
+              ],
+              [
+                78.6937,
+                16.9971
+              ],
+              [
+                78.8162,
+                17.1982
+              ],
+              [
+                78.9155,
+                17.4
+              ]
+            ]
+          ]
+        ]
+      }
     },
     {
       "type": "Feature",
-      "properties": { "name": "Patna", "name_normalized": "patna", "state": "Bihar", "state_normalized": "bihar", "census_code": "BR-PA", "population": 5772804, "area_sq_km": 3202, "dataset_source": "datameet", "dataset_version": "seed-v1", "ingested_at": "2026-01-01T00:00:00Z" },
-      "geometry": { "type": "MultiPolygon", "coordinates": [[[[84.90, 25.75], [85.30, 25.75], [85.30, 25.50], [84.90, 25.50], [84.90, 25.75]]]] }
+      "properties": {
+        "name": "Patna",
+        "name_normalized": "patna",
+        "state": "Bihar",
+        "state_normalized": "bihar",
+        "census_code": "BR-PA",
+        "population": 5772804,
+        "area_sq_km": 3202,
+        "dataset_source": "datameet",
+        "dataset_version": "seed-v1",
+        "ingested_at": "2026-01-01T00:00:00Z"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                85.6389,
+                25.625
+              ],
+              [
+                85.5378,
+                25.8529
+              ],
+              [
+                85.3707,
+                26.0477
+              ],
+              [
+                85.1,
+                26.0796
+              ],
+              [
+                84.8876,
+                25.9567
+              ],
+              [
+                84.6902,
+                25.8383
+              ],
+              [
+                84.6724,
+                25.625
+              ],
+              [
+                84.6116,
+                25.3708
+              ],
+              [
+                84.8218,
+                25.1906
+              ],
+              [
+                85.1,
+                25.1297
+              ],
+              [
+                85.3354,
+                25.2574
+              ],
+              [
+                85.4753,
+                25.4296
+              ],
+              [
+                85.6389,
+                25.625
+              ]
+            ]
+          ]
+        ]
+      }
     },
     {
       "type": "Feature",
-      "properties": { "name": "Thiruvananthapuram", "name_normalized": "thiruvananthapuram", "state": "Kerala", "state_normalized": "kerala", "census_code": "KL-TV", "population": 3307284, "area_sq_km": 2192, "dataset_source": "datameet", "dataset_version": "seed-v1", "ingested_at": "2026-01-01T00:00:00Z" },
-      "geometry": { "type": "MultiPolygon", "coordinates": [[[[76.80, 8.65], [77.10, 8.65], [77.10, 8.35], [76.80, 8.35], [76.80, 8.65]]]] }
+      "properties": {
+        "name": "Thiruvananthapuram",
+        "name_normalized": "thiruvananthapuram",
+        "state": "Kerala",
+        "state_normalized": "kerala",
+        "census_code": "KL-TV",
+        "population": 3307284,
+        "area_sq_km": 2192,
+        "dataset_source": "datameet",
+        "dataset_version": "seed-v1",
+        "ingested_at": "2026-01-01T00:00:00Z"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                77.4571,
+                8.5
+              ],
+              [
+                77.3973,
+                8.7554
+              ],
+              [
+                77.1494,
+                8.8416
+              ],
+              [
+                76.95,
+                8.9486
+              ],
+              [
+                76.7517,
+                8.8397
+              ],
+              [
+                76.5247,
+                8.7428
+              ],
+              [
+                76.4582,
+                8.5
+              ],
+              [
+                76.5995,
+                8.2999
+              ],
+              [
+                76.724,
+                8.1128
+              ],
+              [
+                76.95,
+                8.0428
+              ],
+              [
+                77.1617,
+                8.1374
+              ],
+              [
+                77.3885,
+                8.2496
+              ],
+              [
+                77.4571,
+                8.5
+              ]
+            ]
+          ]
+        ]
+      }
     },
     {
       "type": "Feature",
-      "properties": { "name": "Bhopal", "name_normalized": "bhopal", "state": "Madhya Pradesh", "state_normalized": "madhya pradesh", "census_code": "MP-BH", "population": 2371061, "area_sq_km": 2772, "dataset_source": "datameet", "dataset_version": "seed-v1", "ingested_at": "2026-01-01T00:00:00Z" },
-      "geometry": { "type": "MultiPolygon", "coordinates": [[[[77.25, 23.40], [77.55, 23.40], [77.55, 23.10], [77.25, 23.10], [77.25, 23.40]]]] }
+      "properties": {
+        "name": "Bhopal",
+        "name_normalized": "bhopal",
+        "state": "Madhya Pradesh",
+        "state_normalized": "madhya pradesh",
+        "census_code": "MP-BH",
+        "population": 2371061,
+        "area_sq_km": 2772,
+        "dataset_source": "datameet",
+        "dataset_version": "seed-v1",
+        "ingested_at": "2026-01-01T00:00:00Z"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                77.879,
+                23.25
+              ],
+              [
+                77.7879,
+                23.4558
+              ],
+              [
+                77.648,
+                23.6447
+              ],
+              [
+                77.4,
+                23.7315
+              ],
+              [
+                77.1768,
+                23.6051
+              ],
+              [
+                76.9994,
+                23.4625
+              ],
+              [
+                76.8369,
+                23.25
+              ],
+              [
+                76.9563,
+                23.0146
+              ],
+              [
+                77.1594,
+                22.8671
+              ],
+              [
+                77.4,
+                22.7972
+              ],
+              [
+                77.6173,
+                22.9043
+              ],
+              [
+                77.7895,
+                23.0434
+              ],
+              [
+                77.879,
+                23.25
+              ]
+            ]
+          ]
+        ]
+      }
     },
     {
       "type": "Feature",
-      "properties": { "name": "Guwahati", "name_normalized": "guwahati", "state": "Assam", "state_normalized": "assam", "census_code": "AS-KA", "population": 968549, "area_sq_km": 328, "dataset_source": "datameet", "dataset_version": "seed-v1", "ingested_at": "2026-01-01T00:00:00Z" },
-      "geometry": { "type": "MultiPolygon", "coordinates": [[[[91.60, 26.25], [91.90, 26.25], [91.90, 26.05], [91.60, 26.05], [91.60, 26.25]]]] }
+      "properties": {
+        "name": "Guwahati",
+        "name_normalized": "guwahati",
+        "state": "Assam",
+        "state_normalized": "assam",
+        "census_code": "AS-KA",
+        "population": 968549,
+        "area_sq_km": 328,
+        "dataset_source": "datameet",
+        "dataset_version": "seed-v1",
+        "ingested_at": "2026-01-01T00:00:00Z"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                92.2274,
+                26.15
+              ],
+              [
+                92.1961,
+                26.3812
+              ],
+              [
+                91.9806,
+                26.5085
+              ],
+              [
+                91.75,
+                26.5626
+              ],
+              [
+                91.5314,
+                26.4899
+              ],
+              [
+                91.2983,
+                26.3841
+              ],
+              [
+                91.289,
+                26.15
+              ],
+              [
+                91.2626,
+                25.8974
+              ],
+              [
+                91.472,
+                25.7178
+              ],
+              [
+                91.75,
+                25.7575
+              ],
+              [
+                91.9812,
+                25.7906
+              ],
+              [
+                92.2066,
+                25.9134
+              ],
+              [
+                92.2274,
+                26.15
+              ]
+            ]
+          ]
+        ]
+      }
     },
     {
       "type": "Feature",
-      "properties": { "name": "Chandigarh", "name_normalized": "chandigarh", "state": "Chandigarh", "state_normalized": "chandigarh", "census_code": "CH-CH", "population": 1055450, "area_sq_km": 114, "dataset_source": "datameet", "dataset_version": "seed-v1", "ingested_at": "2026-01-01T00:00:00Z" },
-      "geometry": { "type": "MultiPolygon", "coordinates": [[[[76.70, 30.80], [76.85, 30.80], [76.85, 30.68], [76.70, 30.68], [76.70, 30.80]]]] }
+      "properties": {
+        "name": "Chandigarh",
+        "name_normalized": "chandigarh",
+        "state": "Chandigarh",
+        "state_normalized": "chandigarh",
+        "census_code": "CH-CH",
+        "population": 1055450,
+        "area_sq_km": 114,
+        "dataset_source": "datameet",
+        "dataset_version": "seed-v1",
+        "ingested_at": "2026-01-01T00:00:00Z"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                77.2542,
+                30.74
+              ],
+              [
+                77.1788,
+                30.9404
+              ],
+              [
+                77.0713,
+                31.1811
+              ],
+              [
+                76.775,
+                31.2001
+              ],
+              [
+                76.5151,
+                31.1269
+              ],
+              [
+                76.2824,
+                30.9845
+              ],
+              [
+                76.2026,
+                30.74
+              ],
+              [
+                76.3633,
+                30.5357
+              ],
+              [
+                76.5446,
+                30.3971
+              ],
+              [
+                76.775,
+                30.2989
+              ],
+              [
+                77.031,
+                30.3588
+              ],
+              [
+                77.2244,
+                30.517
+              ],
+              [
+                77.2542,
+                30.74
+              ]
+            ]
+          ]
+        ]
+      }
     },
     {
       "type": "Feature",
-      "properties": { "name": "Dehradun", "name_normalized": "dehradun", "state": "Uttarakhand", "state_normalized": "uttarakhand", "census_code": "UK-DD", "population": 1696694, "area_sq_km": 3088, "dataset_source": "datameet", "dataset_version": "seed-v1", "ingested_at": "2026-01-01T00:00:00Z" },
-      "geometry": { "type": "MultiPolygon", "coordinates": [[[[77.80, 30.50], [78.20, 30.50], [78.20, 30.10], [77.80, 30.10], [77.80, 30.50]]]] }
+      "properties": {
+        "name": "Dehradun",
+        "name_normalized": "dehradun",
+        "state": "Uttarakhand",
+        "state_normalized": "uttarakhand",
+        "census_code": "UK-DD",
+        "population": 1696694,
+        "area_sq_km": 3088,
+        "dataset_source": "datameet",
+        "dataset_version": "seed-v1",
+        "ingested_at": "2026-01-01T00:00:00Z"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                78.5576,
+                30.3
+              ],
+              [
+                78.4753,
+                30.5369
+              ],
+              [
+                78.2987,
+                30.7468
+              ],
+              [
+                78.0,
+                30.6962
+              ],
+              [
+                77.7468,
+                30.6787
+              ],
+              [
+                77.57,
+                30.5144
+              ],
+              [
+                77.4217,
+                30.3
+              ],
+              [
+                77.5822,
+                30.0918
+              ],
+              [
+                77.7634,
+                29.9462
+              ],
+              [
+                78.0,
+                29.8565
+              ],
+              [
+                78.2547,
+                29.919
+              ],
+              [
+                78.4218,
+                30.0897
+              ],
+              [
+                78.5576,
+                30.3
+              ]
+            ]
+          ]
+        ]
+      }
     },
     {
       "type": "Feature",
-      "properties": { "name": "Raipur", "name_normalized": "raipur", "state": "Chhattisgarh", "state_normalized": "chhattisgarh", "census_code": "CG-RA", "population": 4063872, "area_sq_km": 13083, "dataset_source": "datameet", "dataset_version": "seed-v1", "ingested_at": "2026-01-01T00:00:00Z" },
-      "geometry": { "type": "MultiPolygon", "coordinates": [[[[81.50, 21.40], [81.90, 21.40], [81.90, 21.10], [81.50, 21.10], [81.50, 21.40]]]] }
+      "properties": {
+        "name": "Raipur",
+        "name_normalized": "raipur",
+        "state": "Chhattisgarh",
+        "state_normalized": "chhattisgarh",
+        "census_code": "CG-RA",
+        "population": 4063872,
+        "area_sq_km": 13083,
+        "dataset_source": "datameet",
+        "dataset_version": "seed-v1",
+        "ingested_at": "2026-01-01T00:00:00Z"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                82.277,
+                21.25
+              ],
+              [
+                82.3088,
+                21.5776
+              ],
+              [
+                82.0066,
+                21.7449
+              ],
+              [
+                81.7,
+                21.8944
+              ],
+              [
+                81.3834,
+                21.7611
+              ],
+              [
+                81.2326,
+                21.5015
+              ],
+              [
+                80.9828,
+                21.25
+              ],
+              [
+                81.1053,
+                20.93
+              ],
+              [
+                81.3442,
+                20.6757
+              ],
+              [
+                81.7,
+                20.5943
+              ],
+              [
+                82.0445,
+                20.6938
+              ],
+              [
+                82.1861,
+                20.9884
+              ],
+              [
+                82.277,
+                21.25
+              ]
+            ]
+          ]
+        ]
+      }
     },
     {
       "type": "Feature",
-      "properties": { "name": "Ranchi", "name_normalized": "ranchi", "state": "Jharkhand", "state_normalized": "jharkhand", "census_code": "JH-RA", "population": 2914253, "area_sq_km": 5097, "dataset_source": "datameet", "dataset_version": "seed-v1", "ingested_at": "2026-01-01T00:00:00Z" },
-      "geometry": { "type": "MultiPolygon", "coordinates": [[[[85.20, 23.50], [85.55, 23.50], [85.55, 23.20], [85.20, 23.20], [85.20, 23.50]]]] }
+      "properties": {
+        "name": "Ranchi",
+        "name_normalized": "ranchi",
+        "state": "Jharkhand",
+        "state_normalized": "jharkhand",
+        "census_code": "JH-RA",
+        "population": 2914253,
+        "area_sq_km": 5097,
+        "dataset_source": "datameet",
+        "dataset_version": "seed-v1",
+        "ingested_at": "2026-01-01T00:00:00Z"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                85.8635,
+                23.35
+              ],
+              [
+                85.7634,
+                23.5559
+              ],
+              [
+                85.613,
+                23.7285
+              ],
+              [
+                85.375,
+                23.7408
+              ],
+              [
+                85.1386,
+                23.7259
+              ],
+              [
+                84.8882,
+                23.608
+              ],
+              [
+                84.9189,
+                23.35
+              ],
+              [
+                84.9139,
+                23.1056
+              ],
+              [
+                85.133,
+                22.9652
+              ],
+              [
+                85.375,
+                22.91
+              ],
+              [
+                85.654,
+                22.9064
+              ],
+              [
+                85.8631,
+                23.0913
+              ],
+              [
+                85.8635,
+                23.35
+              ]
+            ]
+          ]
+        ]
+      }
     },
     {
       "type": "Feature",
-      "properties": { "name": "Shimla", "name_normalized": "shimla", "state": "Himachal Pradesh", "state_normalized": "himachal pradesh", "census_code": "HP-SH", "population": 814010, "area_sq_km": 5131, "dataset_source": "datameet", "dataset_version": "seed-v1", "ingested_at": "2026-01-01T00:00:00Z" },
-      "geometry": { "type": "MultiPolygon", "coordinates": [[[[77.00, 31.30], [77.35, 31.30], [77.35, 31.00], [77.00, 31.00], [77.00, 31.30]]]] }
+      "properties": {
+        "name": "Shimla",
+        "name_normalized": "shimla",
+        "state": "Himachal Pradesh",
+        "state_normalized": "himachal pradesh",
+        "census_code": "HP-SH",
+        "population": 814010,
+        "area_sq_km": 5131,
+        "dataset_source": "datameet",
+        "dataset_version": "seed-v1",
+        "ingested_at": "2026-01-01T00:00:00Z"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                77.7101,
+                31.15
+              ],
+              [
+                77.6607,
+                31.39
+              ],
+              [
+                77.4109,
+                31.4997
+              ],
+              [
+                77.175,
+                31.573
+              ],
+              [
+                76.8748,
+                31.595
+              ],
+              [
+                76.7083,
+                31.3806
+              ],
+              [
+                76.642,
+                31.15
+              ],
+              [
+                76.6853,
+                30.908
+              ],
+              [
+                76.9468,
+                30.8117
+              ],
+              [
+                77.175,
+                30.6882
+              ],
+              [
+                77.4384,
+                30.7596
+              ],
+              [
+                77.6791,
+                30.9009
+              ],
+              [
+                77.7101,
+                31.15
+              ]
+            ]
+          ]
+        ]
+      }
     },
     {
       "type": "Feature",
-      "properties": { "name": "Panaji", "name_normalized": "panaji", "state": "Goa", "state_normalized": "goa", "census_code": "GA-NG", "population": 818008, "area_sq_km": 1736, "dataset_source": "datameet", "dataset_version": "seed-v1", "ingested_at": "2026-01-01T00:00:00Z" },
-      "geometry": { "type": "MultiPolygon", "coordinates": [[[[73.75, 15.60], [74.00, 15.60], [74.00, 15.35], [73.75, 15.35], [73.75, 15.60]]]] }
+      "properties": {
+        "name": "Panaji",
+        "name_normalized": "panaji",
+        "state": "Goa",
+        "state_normalized": "goa",
+        "census_code": "GA-NG",
+        "population": 818008,
+        "area_sq_km": 1736,
+        "dataset_source": "datameet",
+        "dataset_version": "seed-v1",
+        "ingested_at": "2026-01-01T00:00:00Z"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                74.2944,
+                15.475
+              ],
+              [
+                74.3357,
+                15.7314
+              ],
+              [
+                74.0793,
+                15.816
+              ],
+              [
+                73.875,
+                15.883
+              ],
+              [
+                73.6346,
+                15.8762
+              ],
+              [
+                73.4489,
+                15.7121
+              ],
+              [
+                73.4447,
+                15.475
+              ],
+              [
+                73.5164,
+                15.2755
+              ],
+              [
+                73.6139,
+                15.0392
+              ],
+              [
+                73.875,
+                15.0588
+              ],
+              [
+                74.1153,
+                15.0738
+              ],
+              [
+                74.2943,
+                15.2417
+              ],
+              [
+                74.2944,
+                15.475
+              ]
+            ]
+          ]
+        ]
+      }
     }
   ]
 }
