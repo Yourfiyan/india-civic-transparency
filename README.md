@@ -1,31 +1,46 @@
 # India Civic Transparency Platform
 
-### License
-
-![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
+![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)
+![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=node.js&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?logo=postgresql&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.9+-3776AB?logo=python&logoColor=white)
 
 A full-stack civic data platform that visualizes Indian public datasets to help citizens understand government systems — Supreme Court judgments, crime statistics, district-level geographic data, and infrastructure development.
 
 ## Architecture
 
-```
-┌───────────────┐       ┌──────────────┐       ┌───────────────────┐
-│   Frontend    │ ────> │   Backend    │ ────> │  PostgreSQL +     │
-│  React/Vite   │       │  Express API │       │  PostGIS          │
-│  Leaflet      │ <──── │  pino logger │ <──── │  dataset_ingestion│
-│  Tailwind CSS │       │              │       │  _log             │
-└───────────────┘       └──────────────┘       └───────────────────┘
-                           ▲
-                           │ cache/static/
-                           │ india-districts.topojson
-                           │
-┌──────────────────────────┘
-│  Data Pipeline (Python)
-│  ├── DuckDB (parquet queries)
-│  ├── geopandas (GeoJSON)
-│  ├── District name normalization
-│  └── Dataset versioning
-└──────────────────────────
+```mermaid
+flowchart TB
+    subgraph Frontend["Frontend (React + Vite)"]
+        Leaflet[Leaflet Maps]
+        Tailwind[Tailwind CSS]
+        Dashboard[Analytics Dashboard]
+    end
+
+    subgraph Backend["Backend (Express API)"]
+        API[REST API Routes]
+        Pino[Pino Logger]
+        Cache[TopoJSON Cache]
+    end
+
+    subgraph Database["PostgreSQL + PostGIS"]
+        Tables[(Cases, Districts,\nCrime, Infrastructure)]
+        Ingestion[(Dataset Ingestion Log)]
+    end
+
+    subgraph Pipeline["Data Pipeline (Python)"]
+        DuckDB[DuckDB - Parquet Queries]
+        GeoPandas[geopandas - GeoJSON]
+        Normalize[District Name Normalization]
+    end
+
+    Frontend -->|HTTP Requests| Backend
+    Backend -->|SQL + PostGIS| Database
+    Pipeline -->|Seed & ETL| Database
+    Cache -->|TopoJSON| Frontend
+    Pipeline -->|Generate Cache| Cache
 ```
 
 ## Tech Stack
