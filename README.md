@@ -212,16 +212,38 @@ india-civic-transparency/
 └── seed_data/        Demo datasets for instant setup
 ```
 
-## Contributing
+## Case Study
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+### Problem
 
-## Security
+Indian civic data — court judgments, crime statistics, infrastructure projects — is scattered across government portals in inconsistent formats (CSV, Parquet, GeoJSON). Citizens have no way to cross-reference this data at the district level, making it impossible to answer questions like "which districts have high crime but low conviction rates?" or "where has road construction stalled?"
 
-See [SECURITY.md](SECURITY.md) for vulnerability reporting.
+### Solution
 
-## License
+A full-stack platform that ingests, normalizes, and visualizes civic datasets on an interactive map. District-level aggregation enables cross-dataset comparison. All data is versioned — every record tracks its source, version tag, and ingestion timestamp — so analyses are reproducible.
 
-This project is licensed under the [MIT License](LICENSE).
+### Architecture Decisions
 
+- **Leaflet over Mapbox/Google Maps**: Open-source, no API key required, Canvas 2D renderer handles 700+ district polygons without performance issues
+- **PostGIS over plain PostgreSQL**: Spatial queries (point-in-polygon, centroid calculation) are essential for mapping infrastructure and crime data to districts
+- **DuckDB in the ETL pipeline**: Reads Parquet files from S3 directly without downloading, handles gigabyte-scale datasets with zero configuration
+- **Separate frontend/backend/pipeline**: Each layer can be developed and deployed independently. The Python pipeline runs as a batch job, not as part of the web server.
+- **Dataset versioning**: Government data changes without notice. Versioning lets users compare results across different data releases.
+
+### Security Considerations
+
+- Backend environment variables (DB credentials, API keys) stored in `.env`, excluded from git
+- API endpoints are read-only — no user-submitted data enters the database
+- SQL queries use parameterized queries throughout the Express backend
+- Data pipeline validates schema before insertion to prevent corrupted imports
+- Structured JSON logging (pino) provides an audit trail without exposing sensitive data
+
+### Lessons Learned
+
+- **District name normalization is the hardest part**: Government datasets use different spellings, transliterations, and administrative divisions. The normalization logic in the ETL pipeline handles more edge cases than the entire frontend.
+- **TopoJSON caching is essential**: Generating district boundaries on every request was too slow. Pre-generating and caching TopoJSON cut load time from 4s to 200ms.
+- **Seed data enables contribution**: Including demo data means contributors can run the full stack without AWS credentials or a government data account.
+- **The Makefile is the documentation**: `make setup`, `make dev`, `make etl` — contributors don't need to read setup docs if the Makefile works.
+
+See [docs/architecture.md](docs/architecture.md) for a detailed system architecture.
 
