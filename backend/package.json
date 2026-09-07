@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
-    "generate-cache": "node cache/generate-topojson.js"
+    "generate-cache": "node cache/generate-topojson.js",
+    "test": "vitest run"
   },
   "dependencies": {
     "compression": "^1.7.4",
@@ -18,6 +19,11 @@
     "topojson-server": "^3.0.1"
   },
   "devDependencies": {
-    "pino-pretty": "^11.2.0"
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "jsdom": "^30.1.1",
+    "pino-pretty": "^11.2.0",
+    "supertest": "^7.3.1",
+    "vitest": "^5.0.3"
   }
 }
