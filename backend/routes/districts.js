@@ -2,15 +2,25 @@
 
 const path = require('path');
 const fs = require('fs');
+const crypto = require('crypto');
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
 const { logger } = require('../lib/logger');
+const { validate } = require('../middleware/validate');
+const { NotFoundError, ValidationError } = require('../lib/errors');
 
 const CACHE_DIR = process.env.CACHE_DIR || path.join(__dirname, '..', 'cache', 'static');
 
+const districtsQuerySchema = {
+  query: {
+    state: { type: 'string', maxLength: 100, optional: true },
+    dataset_version: { type: 'string', maxLength: 50, optional: true },
+  },
+};
+
 // GET /api/districts — lightweight list without geometry
-router.get('/', async (req, res, next) => {
+router.get('/', validate(districtsQuerySchema), async (req, res, next) => {
   try {
     const { state, dataset_version } = req.query;
     const conditions = [];
@@ -45,17 +55,26 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-// GET /api/districts/topojson — serve cached TopoJSON
+// GET /api/districts/topojson — serve cached TopoJSON with ETag and 304 support
 router.get('/topojson', (req, res, next) => {
   try {
     const filePath = path.join(CACHE_DIR, 'india-districts.topojson');
 
     if (!fs.existsSync(filePath)) {
-      return res.status(404).json({ error: 'TopoJSON cache not generated. Run: make cache' });
+      return next(new NotFoundError('TopoJSON cache not generated. Run: make cache'));
     }
+
+    const stat = fs.statSync(filePath);
+    const etag = `W/"${stat.size}-${stat.mtime.getTime()}"`;
 
     res.set('Cache-Control', 'public, max-age=86400');
     res.set('Content-Type', 'application/json');
+    res.set('ETag', etag);
+
+    if (req.headers['if-none-match'] === etag) {
+      return res.status(304).end();
+    }
+
     res.sendFile(path.resolve(filePath));
   } catch (err) {
     logger.error({ err }, 'Failed to serve TopoJSON');
@@ -66,10 +85,9 @@ router.get('/topojson', (req, res, next) => {
 // GET /api/districts/:id — single district with geometry and related data
 router.get('/:id', async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const districtId = parseInt(id, 10);
-    if (isNaN(districtId)) {
-      return res.status(400).json({ error: 'Invalid district ID' });
+    const districtId = parseInt(req.params.id, 10);
+    if (isNaN(districtId) || districtId <= 0) {
+      return next(new ValidationError('Invalid district ID'));
     }
 
     const district = await db.query(
@@ -81,25 +99,24 @@ router.get('/:id', async (req, res, next) => {
     );
 
     if (district.rows.length === 0) {
-      return res.status(404).json({ error: 'District not found' });
+      return next(new NotFoundError('District not found'));
     }
 
-    // Fetch related crime summary
-    const crime = await db.query(
-      `SELECT year, SUM(cases_registered) AS total_registered,
-              SUM(cases_convicted) AS total_convicted
-       FROM crime_stats WHERE district_id = $1
-       GROUP BY year ORDER BY year DESC`,
-      [districtId]
-    );
-
-    // Fetch related infrastructure
-    const infra = await db.query(
-      `SELECT id, project_name, scheme, type, status, sanctioned_cost, completion_pct, year
-       FROM infrastructure_projects WHERE district_id = $1
-       ORDER BY year DESC NULLS LAST`,
-      [districtId]
-    );
+    const [crime, infra] = await Promise.all([
+      db.query(
+        `SELECT year, SUM(cases_registered) AS total_registered,
+                SUM(cases_convicted) AS total_convicted
+         FROM crime_stats WHERE district_id = $1
+         GROUP BY year ORDER BY year DESC`,
+        [districtId]
+      ),
+      db.query(
+        `SELECT id, project_name, scheme, type, status, sanctioned_cost, completion_pct, year
+         FROM infrastructure_projects WHERE district_id = $1
+         ORDER BY year DESC NULLS LAST`,
+        [districtId]
+      ),
+    ]);
 
     res.json({
       ...district.rows[0],
