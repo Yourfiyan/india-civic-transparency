@@ -4,9 +4,23 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db');
 const { logger } = require('../lib/logger');
+const { validate } = require('../middleware/validate');
+const { NotFoundError } = require('../lib/errors');
+
+const casesQuerySchema = {
+  query: {
+    q: { type: 'string', maxLength: 200, optional: true },
+    judge: { type: 'string', maxLength: 100, optional: true },
+    year_from: { type: 'int', min: 1950, max: 2100, optional: true },
+    year_to: { type: 'int', min: 1950, max: 2100, optional: true },
+    limit: { type: 'int', min: 1, max: 200, optional: true },
+    offset: { type: 'int', min: 0, optional: true },
+    dataset_version: { type: 'string', maxLength: 50, optional: true },
+  },
+};
 
 // GET /api/cases — paginated list with full-text search
-router.get('/', async (req, res, next) => {
+router.get('/', validate(casesQuerySchema), async (req, res, next) => {
   try {
     const { q, judge, year_from, year_to, dataset_version, limit = 50, offset = 0 } = req.query;
     const conditions = [];
@@ -14,7 +28,7 @@ router.get('/', async (req, res, next) => {
     let paramIndex = 1;
 
     if (q) {
-      conditions.push(`to_tsvector('english', COALESCE(title, '') || ' ' || COALESCE(petitioner, '') || ' ' || COALESCE(respondent, '')) @@ plainto_tsquery('english', $${paramIndex})`);
+      conditions.push(`to_tsvector('english', COALESCE(title, '') || ' ' || COALESCE(petitioner, '') || ' ' || COALESCE(respondent, '') || ' ' || COALESCE(description, '')) @@ plainto_tsquery('english', $${paramIndex})`);
       params.push(q);
       paramIndex++;
     }
@@ -59,9 +73,8 @@ router.get('/', async (req, res, next) => {
       LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
     `;
 
-    /* Separate total count query (uses only the WHERE conditions, not LIMIT/OFFSET) */
     const countSql = `SELECT COUNT(*) FROM supreme_cases ${where}`;
-    const countParams = params.slice(0, -2); /* strip limitVal and offsetVal */
+    const countParams = params.slice(0, -2);
 
     const [result, countResult] = await Promise.all([
       db.query(sql, params),
@@ -85,7 +98,7 @@ router.get('/:id', async (req, res, next) => {
     );
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Case not found' });
+      return next(new NotFoundError('Case not found'));
     }
 
     res.json(result.rows[0]);
