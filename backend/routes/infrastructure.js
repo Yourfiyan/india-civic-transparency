@@ -4,6 +4,19 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db');
 const { logger } = require('../lib/logger');
+const { validate } = require('../middleware/validate');
+
+const infraQuerySchema = {
+  query: {
+    district_id: { type: 'int', min: 1, optional: true },
+    scheme: { type: 'string', maxLength: 100, optional: true },
+    status: { type: 'enum', enumValues: ['completed', 'in_progress', 'sanctioned'], optional: true },
+    year: { type: 'int', min: 1950, max: 2100, optional: true },
+    dataset_version: { type: 'string', maxLength: 50, optional: true },
+    limit: { type: 'int', min: 1, max: 500, optional: true },
+    offset: { type: 'int', min: 0, optional: true },
+  },
+};
 
 // GET /api/infrastructure/geo — projects with district centroids
 router.get('/geo', async (req, res, next) => {
@@ -27,7 +40,7 @@ router.get('/geo', async (req, res, next) => {
 });
 
 // GET /api/infrastructure — filtered list
-router.get('/', async (req, res, next) => {
+router.get('/', validate(infraQuerySchema), async (req, res, next) => {
   try {
     const { district_id, scheme, status, year, dataset_version, limit = 100, offset = 0 } = req.query;
     const conditions = [];
@@ -41,8 +54,8 @@ router.get('/', async (req, res, next) => {
     }
 
     if (scheme) {
-      conditions.push(`ip.scheme = $${paramIndex}`);
-      params.push(scheme);
+      conditions.push(`ip.scheme ILIKE $${paramIndex}`);
+      params.push(`%${scheme}%`);
       paramIndex++;
     }
 
