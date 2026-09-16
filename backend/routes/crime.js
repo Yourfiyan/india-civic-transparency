@@ -4,9 +4,29 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db');
 const { logger } = require('../lib/logger');
+const { validate } = require('../middleware/validate');
+
+const crimeQuerySchema = {
+  query: {
+    district_id: { type: 'int', min: 1, optional: true },
+    year: { type: 'int', min: 1950, max: 2100, optional: true },
+    category: { type: 'string', maxLength: 100, optional: true },
+    dataset_version: { type: 'string', maxLength: 50, optional: true },
+    limit: { type: 'int', min: 1, max: 500, optional: true },
+    offset: { type: 'int', min: 0, optional: true },
+  },
+};
+
+const crimeSummarySchema = {
+  query: {
+    year: { type: 'int', min: 1950, max: 2100, optional: true },
+    state: { type: 'string', maxLength: 100, optional: true },
+    dataset_version: { type: 'string', maxLength: 50, optional: true },
+  },
+};
 
 // GET /api/crime — filtered crime statistics
-router.get('/', async (req, res, next) => {
+router.get('/', validate(crimeQuerySchema), async (req, res, next) => {
   try {
     const { district_id, year, category, dataset_version, limit = 100, offset = 0 } = req.query;
     const conditions = [];
@@ -27,7 +47,7 @@ router.get('/', async (req, res, next) => {
 
     if (category) {
       conditions.push(`cs.category = $${paramIndex}`);
-      params.push(category);
+      params.push(category.toLowerCase().trim());
       paramIndex++;
     }
 
@@ -86,7 +106,7 @@ router.get('/geo', async (req, res, next) => {
 });
 
 // GET /api/crime/summary — aggregated by state and year
-router.get('/summary', async (req, res, next) => {
+router.get('/summary', validate(crimeSummarySchema), async (req, res, next) => {
   try {
     const { year, state, dataset_version } = req.query;
     const conditions = [];
