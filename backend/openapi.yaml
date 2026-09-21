@@ -1,0 +1,239 @@
+openapi: 3.0.3
+info:
+  title: India Civic Transparency API
+  description: Public REST API for visualizing and analyzing open Indian judicial, criminal, spatial, and infrastructure data.
+  version: 1.0.0
+  contact:
+    name: Civic Transparency Maintainers
+    url: https://github.com/Yourfiyan/india-civic-transparency
+servers:
+  - url: http://localhost:3000
+    description: Local development server
+paths:
+  /api/health:
+    get:
+      summary: Service Health Check
+      description: Returns service status, uptime, and timestamp.
+      responses:
+        '200':
+          description: Service is healthy.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: { type: string, example: "ok" }
+                  timestamp: { type: string, format: date-time }
+                  uptime: { type: number, example: 42.1 }
+                  environment: { type: string, example: "development" }
+
+  /api/cases:
+    get:
+      summary: Supreme Court Cases
+      description: Paginated search of Supreme Court judgments with full-text search.
+      parameters:
+        - name: q
+          in: query
+          schema: { type: string }
+          description: Full-text search across title, petitioner, and respondent.
+        - name: judge
+          in: query
+          schema: { type: string }
+          description: Filter cases by presiding judge.
+        - name: year_from
+          in: query
+          schema: { type: integer, minimum: 1950, maximum: 2100 }
+        - name: year_to
+          in: query
+          schema: { type: integer, minimum: 1950, maximum: 2100 }
+        - name: limit
+          in: query
+          schema: { type: integer, default: 50, minimum: 1, maximum: 200 }
+        - name: offset
+          in: query
+          schema: { type: integer, default: 0, minimum: 0 }
+        - name: dataset_version
+          in: query
+          schema: { type: string }
+      responses:
+        '200':
+          description: Paginated case records.
+        '400':
+          description: Validation error.
+
+  /api/cases/{id}:
+    get:
+      summary: Get Single Supreme Court Case
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Case details.
+        '404':
+          description: Case not found.
+
+  /api/districts:
+    get:
+      summary: List Districts
+      description: Lightweight list of districts without geometries.
+      parameters:
+        - name: state
+          in: query
+          schema: { type: string }
+        - name: dataset_version
+          in: query
+          schema: { type: string }
+      responses:
+        '200':
+          description: District list.
+
+  /api/districts/topojson:
+    get:
+      summary: Cached TopoJSON Boundaries
+      description: Pre-generated TopoJSON boundaries with ETag and 304 Not Modified caching.
+      responses:
+        '200':
+          description: TopoJSON feature collection.
+        '304':
+          description: Not Modified.
+
+  /api/districts/{id}:
+    get:
+      summary: District Detail
+      description: Full district record with PostGIS GeoJSON geometry, crime summary, and infrastructure projects.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: District details with geometry.
+        '400':
+          description: Invalid ID.
+        '404':
+          description: District not found.
+
+  /api/crime:
+    get:
+      summary: Crime Statistics
+      parameters:
+        - name: district_id
+          in: query
+          schema: { type: integer }
+        - name: year
+          in: query
+          schema: { type: integer }
+        - name: category
+          in: query
+          schema: { type: string }
+        - name: limit
+          in: query
+          schema: { type: integer, default: 100 }
+        - name: offset
+          in: query
+          schema: { type: integer, default: 0 }
+      responses:
+        '200':
+          description: Filtered crime statistics.
+
+  /api/crime/geo:
+    get:
+      summary: Crime Geo Aggregates
+      description: Aggregate crime cases and convictions per district with geographic centroids.
+      responses:
+        '200':
+          description: Geo centroids with total crime counts.
+
+  /api/crime/summary:
+    get:
+      summary: State & Year Crime Summary
+      parameters:
+        - name: state
+          in: query
+          schema: { type: string }
+        - name: year
+          in: query
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Aggregated state crime statistics.
+
+  /api/infrastructure:
+    get:
+      summary: Infrastructure Projects
+      parameters:
+        - name: district_id
+          in: query
+          schema: { type: integer }
+        - name: status
+          in: query
+          schema: { type: string, enum: [completed, in_progress, sanctioned] }
+        - name: scheme
+          in: query
+          schema: { type: string }
+        - name: year
+          in: query
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Infrastructure projects.
+
+  /api/infrastructure/geo:
+    get:
+      summary: Infrastructure Geo Centroids
+      responses:
+        '200':
+          description: Project markers with district centroids.
+
+  /api/analytics/judicial-delay:
+    get:
+      summary: Judicial Disposal Delays
+      parameters:
+        - name: year_from
+          in: query
+          schema: { type: integer }
+        - name: year_to
+          in: query
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Average and median disposal delays in days by year.
+
+  /api/analytics/crime-vs-justice:
+    get:
+      summary: Crime vs Justice Conviction Comparison
+      parameters:
+        - name: state
+          in: query
+          schema: { type: string }
+        - name: year
+          in: query
+          schema: { type: integer }
+      responses:
+        '200':
+          description: District crime registration vs conviction rates.
+
+  /api/analytics/district-score:
+    get:
+      summary: Composite District Transparency & Development Score
+      parameters:
+        - name: state
+          in: query
+          schema: { type: string }
+        - name: year
+          in: query
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Composite 0-100 score and sub-scores.
+
+  /api/datasets:
+    get:
+      summary: Dataset Ingestion Audit Log
+      responses:
+        '200':
+          description: List of ingested datasets and version metadata.
