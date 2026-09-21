@@ -9,6 +9,7 @@ import type {
   CrimeVsJusticeRow,
   DistrictScoreRow,
 } from '../types';
+import { exportToCsv, exportToJson } from '../utils/exportData';
 
 type Tab = 'delay' | 'crime' | 'score';
 
@@ -30,21 +31,61 @@ export default function AnalyticsDashboard() {
     setLoading(true);
     const v = version || undefined;
     if (tab === 'delay') {
-      getJudicialDelay(v).then((r) => setDelayData(r.years)).catch(() => setDelayData([])).finally(() => setLoading(false));
+      getJudicialDelay(v)
+        .then((r) => setDelayData(r.years))
+        .catch(() => setDelayData([]))
+        .finally(() => setLoading(false));
     } else if (tab === 'crime') {
-      getCrimeVsJustice({ dataset_version: v }).then((r) => setCrimeData(r.districts)).catch(() => setCrimeData([])).finally(() => setLoading(false));
+      getCrimeVsJustice({ dataset_version: v })
+        .then((r) => setCrimeData(r.districts))
+        .catch(() => setCrimeData([]))
+        .finally(() => setLoading(false));
     } else {
-      getDistrictScores(v).then((r) => setScoreData(r.districts)).catch(() => setScoreData([])).finally(() => setLoading(false));
+      getDistrictScores(v)
+        .then((r) => setScoreData(r.districts))
+        .catch(() => setScoreData([]))
+        .finally(() => setLoading(false));
     }
   }, [tab, version]);
+
+  const handleExport = (format: 'csv' | 'json') => {
+    const data =
+      tab === 'delay'
+        ? (delayData as unknown as Record<string, unknown>[])
+        : tab === 'crime'
+        ? (crimeData as unknown as Record<string, unknown>[])
+        : (scoreData as unknown as Record<string, unknown>[]);
+
+    const filename = `analytics-${tab}`;
+    if (format === 'csv') exportToCsv(filename, data);
+    else exportToJson(filename, data);
+  };
 
   const maxVal = (arr: number[]) => Math.max(...arr, 1);
 
   return (
     <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h2 className="text-xs font-semibold uppercase tracking-wider text-slate-400">Analytics</h2>
+        <div className="flex gap-1.5">
+          <button
+            onClick={() => handleExport('csv')}
+            className="rounded bg-slate-800 px-2 py-1 text-[0.65rem] font-semibold text-slate-300 hover:bg-slate-700"
+          >
+            CSV
+          </button>
+          <button
+            onClick={() => handleExport('json')}
+            className="rounded bg-slate-800 px-2 py-1 text-[0.65rem] font-semibold text-slate-300 hover:bg-slate-700"
+          >
+            JSON
+          </button>
+        </div>
+      </div>
+
       {/* Version filter */}
       <input
-        placeholder="Filter by version…"
+        placeholder="Filter by dataset version…"
         value={version}
         onChange={(e) => setVersion(e.target.value)}
         className="w-full rounded-lg border border-slate-700 bg-slate-800/60 px-3 py-2 text-xs text-slate-200 placeholder-slate-500 outline-none focus:border-indigo-500"
@@ -56,11 +97,9 @@ export default function AnalyticsDashboard() {
           <button
             key={key}
             onClick={() => setTab(key)}
-            className={`flex-1 rounded-md px-2 py-1.5 text-[0.72rem] font-semibold transition-all
-              ${tab === key
-                ? 'bg-indigo-600/30 text-indigo-300 shadow-sm'
-                : 'text-slate-400 hover:text-slate-200'
-              }`}
+            className={`flex-1 rounded-md px-2 py-1.5 text-[0.72rem] font-semibold transition-all ${
+              tab === key ? 'bg-indigo-600/30 text-indigo-300 shadow-xs' : 'text-slate-400 hover:text-slate-200'
+            }`}
           >
             {label}
           </button>
@@ -110,12 +149,22 @@ export default function AnalyticsDashboard() {
                   <h4 className="text-xs font-semibold text-slate-200">
                     {row.name}, {row.state}
                   </h4>
-                  <span className="rounded-md bg-slate-700/50 px-1.5 py-0.5 text-[0.6rem] font-medium text-slate-400">{row.year}</span>
+                  <span className="rounded-md bg-slate-700/50 px-1.5 py-0.5 text-[0.6rem] font-medium text-slate-400">
+                    {row.year}
+                  </span>
                 </div>
                 <div className="mt-2 flex gap-4 text-[0.7rem]">
-                  <span className="text-slate-400">Reg: <strong className="text-slate-200">{Number(row.total_registered).toLocaleString()}</strong></span>
-                  <span className="text-slate-400">Conv: <strong className="text-slate-200">{Number(row.total_convicted).toLocaleString()}</strong></span>
-                  <span className={`font-bold ${rate > 50 ? 'text-emerald-400' : rate > 25 ? 'text-amber-400' : 'text-rose-400'}`}>
+                  <span className="text-slate-400">
+                    Reg: <strong className="text-slate-200">{Number(row.total_registered).toLocaleString()}</strong>
+                  </span>
+                  <span className="text-slate-400">
+                    Conv: <strong className="text-slate-200">{Number(row.total_convicted).toLocaleString()}</strong>
+                  </span>
+                  <span
+                    className={`font-bold ${
+                      rate > 50 ? 'text-emerald-400' : rate > 25 ? 'text-amber-400' : 'text-rose-400'
+                    }`}
+                  >
                     {rate.toFixed(1)}%
                   </span>
                 </div>
@@ -139,8 +188,10 @@ export default function AnalyticsDashboard() {
             ];
             return (
               <div key={row.district_id} className="rounded-xl border border-slate-700/40 bg-slate-800/40 p-3">
-                <div className="flex items-center justify-between mb-2">
-                  <h4 className="text-xs font-semibold text-slate-200">{row.name}, {row.state}</h4>
+                <div className="mb-2 flex items-center justify-between">
+                  <h4 className="text-xs font-semibold text-slate-200">
+                    {row.name}, {row.state}
+                  </h4>
                   <span className="rounded-lg bg-indigo-600/25 px-2 py-0.5 text-xs font-bold text-indigo-300">
                     {Number(row.score).toFixed(1)}
                   </span>
@@ -155,7 +206,9 @@ export default function AnalyticsDashboard() {
                           style={{ width: `${(val / 25) * 100}%` }}
                         />
                       </div>
-                      <span className="w-7 text-right font-mono font-semibold text-slate-400">{val.toFixed(1)}</span>
+                      <span className="w-7 text-right font-mono font-semibold text-slate-400">
+                        {val.toFixed(1)}
+                      </span>
                     </div>
                   ))}
                   {/* composite */}
@@ -167,7 +220,9 @@ export default function AnalyticsDashboard() {
                         style={{ width: `${(Number(row.score) / max) * 100}%` }}
                       />
                     </div>
-                    <span className="w-7 text-right font-mono font-bold text-indigo-300">{Number(row.score).toFixed(1)}</span>
+                    <span className="w-7 text-right font-mono font-bold text-indigo-300">
+                      {Number(row.score).toFixed(1)}
+                    </span>
                   </div>
                 </div>
               </div>
