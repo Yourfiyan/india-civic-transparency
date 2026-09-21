@@ -1,30 +1,63 @@
 # Dependencies
 node_modules/
+.pnp
+.pnp.js
+
+# Python caches and virtual environments
 __pycache__/
-*.pyc
-*.pyo
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
 data_pipeline/venv/
+data_pipeline/.venv/
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
 
-# Environment
+# Build outputs
+dist/
+build/
+frontend/dist/
+*.egg-info/
+.eggs/
+
+# Environment configurations and secrets
 .env
+.env.*
+!.env.example
 backend/.env
+frontend/.env.local
 
-# Data pipeline working directories
+# Data pipeline working directories and raw files
 data_pipeline/raw/
 data_pipeline/output/
+*.parquet
+*.sqlite3
 
-# Cache
+# Generated caches
 backend/cache/static/*.topojson
 
-# Logs (keep directory via .gitkeep)
+# Logs
 logs/*.log
+!logs/.gitkeep
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# OS files
+# System and IDE files
 .DS_Store
 Thumbs.db
-
-# IDE
-.vscode/
 .idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
 *.swp
 *.swo
+*.bak
+*.tmp

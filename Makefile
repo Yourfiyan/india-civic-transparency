@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 
-.PHONY: setup db-up db-schema seed etl etl-version cache dev logs-tail clean
+.PHONY: setup db-up db-schema seed etl etl-version cache dev test test-backend test-frontend test-pipeline benchmark logs-tail clean
 
 # Full environment setup
 setup:
@@ -8,7 +8,7 @@ setup:
 
 # Start PostgreSQL via Docker
 db-up:
-	docker compose up -d
+	docker compose up -d postgres
 
 # Apply database schema
 db-schema:
@@ -34,6 +34,25 @@ cache:
 # Start backend + frontend for development
 dev:
 	@bash scripts/start-dev.sh
+
+# Run all test suites
+test: test-backend test-frontend test-pipeline
+
+# Run backend integration tests
+test-backend:
+	cd backend && npm test
+
+# Run frontend unit and component tests
+test-frontend:
+	cd frontend && npm test
+
+# Run data pipeline unit and contract tests
+test-pipeline:
+	cd data_pipeline && .venv/bin/pytest tests/
+
+# Run performance benchmarks
+benchmark:
+	node scripts/benchmark.js
 
 # Tail log files
 logs-tail:
