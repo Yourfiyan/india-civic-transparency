@@ -74,12 +74,14 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
 
       L.control.zoom({ position: 'bottomright' }).addTo(map);
 
-      /* Try adding a dark tile layer — fails gracefully in Colab */
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
-        subdomains: 'abcd',
-        maxZoom: 19,
-        errorTileUrl: '',           // don't show broken-image icons
-      }).addTo(map);
+      /* Dark base tile layer without watermark/API key */
+      L.tileLayer(
+        'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',
+        {
+          maxZoom: 16,
+          attribution: '&copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
+        }
+      ).addTo(map);
 
       mapRef.current = map;
 
@@ -107,41 +109,52 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
           if (scoreRes?.ok) {
             const scoreData = await scoreRes.json();
             for (const d of scoreData.districts ?? []) {
-              scoreMap.set(Number(d.district_id ?? d.id), Number(d.score));
+              const dId = Number(d.district_id ?? d.id);
+              if (!isNaN(dId)) {
+                scoreMap.set(dId, Number(d.score));
+              }
             }
           }
 
-          /* Merge scores */
+          /* Merge scores & data availability */
           for (const f of geojson.features) {
-            const fid = Number(f.properties?.id ?? f.properties?.district_id);
-            f.properties = { ...f.properties, _score: scoreMap.get(fid) ?? 50 };
+            const fid = Number(f.id ?? f.properties?.id ?? f.properties?.district_id);
+            const hasScore = scoreMap.has(fid);
+            const sc = scoreMap.get(fid) ?? 50;
+            const hasData = Boolean(f.properties?.has_data || hasScore);
+            f.properties = { ...f.properties, id: fid, _score: sc, _hasData: hasData };
           }
 
           /* ── Final cancelled check before DOM mutation ── */
           if (cancelled) return;
 
-          /* ── Create GeoJSON layer ── */
+          /* ── Create GeoJSON layer (render ONLY districts with active data, NO bright borders) ── */
           const geoLayer = L.geoJSON(geojson, {
+            filter: (feature) => {
+              const fid = Number(feature.id ?? feature.properties?.id ?? feature.properties?.district_id);
+              return Boolean(feature?.properties?._hasData || scoreMap.has(fid) || feature?.properties?.has_data);
+            },
             style: (feature) => {
               const sc = feature?.properties?._score ?? 50;
+              const col = scoreColor(sc);
               return {
-                fillColor: scoreColor(sc),
+                fillColor: col,
                 fillOpacity: opacityRef.current,
-                color: '#cbd5e1',
-                weight: 1.5,
-                opacity: 0.9,
+                stroke: false,
+                weight: 0,
               };
             },
             onEachFeature: (feature, layer) => {
               const props = feature.properties;
-              const id = Number(props?.id ?? props?.district_id);
+              const id = Number(feature.id ?? props?.id ?? props?.district_id);
               const name = props?.name ?? 'Unknown';
+              const state = props?.state ? ` (${props.state})` : '';
               const sc = props?._score;
 
               /* Tooltip */
               const tip = sc != null
-                ? `<strong>${name}</strong><br/><span style="font-size:11px;color:#94a3b8">Score: ${Number(sc).toFixed(1)}</span>`
-                : `<strong>${name}</strong>`;
+                ? `<strong>${name}${state}</strong><br/><span style="font-size:11px;color:#94a3b8">Civic Score: ${Number(sc).toFixed(1)}</span>`
+                : `<strong>${name}${state}</strong>`;
               layer.bindTooltip(tip, {
                 sticky: true,
                 direction: 'top',
@@ -151,9 +164,11 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
               /* Hover */
               layer.on('mouseover', () => {
                 (layer as L.Path).setStyle({
-                  fillColor: '#a5b4fc',
-                  fillOpacity: 0.7,
-                  weight: 2,
+                  fillColor: '#818cf8',
+                  fillOpacity: 0.85,
+                  stroke: true,
+                  weight: 1.5,
+                  color: '#e0e7ff',
                 });
               });
 
@@ -161,9 +176,10 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
                 if (selectedIdRef.current === id) {
                   (layer as L.Path).setStyle({
                     fillColor: '#f59e0b',
-                    fillOpacity: 0.75,
+                    fillOpacity: 0.85,
+                    stroke: true,
                     color: '#fbbf24',
-                    weight: 2.5,
+                    weight: 2,
                   });
                 } else {
                   geoLayer.resetStyle(layer as L.Path);
@@ -176,9 +192,10 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
                 selectedIdRef.current = id;
                 (layer as L.Path).setStyle({
                   fillColor: '#f59e0b',
-                  fillOpacity: 0.75,
+                  fillOpacity: 0.85,
+                  stroke: true,
                   color: '#fbbf24',
-                  weight: 2.5,
+                  weight: 2,
                 });
                 onDistrictClickRef.current(id, name);
               });
@@ -187,10 +204,15 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
 
           districtLayerRef.current = geoLayer;
 
-          /* Fit to India bounds */
-          map.fitBounds(geoLayer.getBounds(), { padding: [20, 20] });
+          /* Fit to India bounds if valid */
+          if (geoLayer.getLayers().length > 0) {
+            const bounds = geoLayer.getBounds();
+            if (bounds.isValid()) {
+              map.fitBounds(bounds, { padding: [20, 20] });
+            }
+          }
 
-          console.log('[MapView] Leaflet: Districts loaded:', geojson.features.length);
+          console.log('[MapView] Leaflet: Districts loaded:', geoLayer.getLayers().length);
         } catch (err) {
           if (cancelled) return;
           console.error('[MapView] Failed to load districts:', err);
@@ -213,23 +235,24 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(
           for (const d of data.districts) {
             const cases = d.total_cases ?? 0;
             const convicted = d.total_convicted ?? 0;
-            const hasData = cases > 0;
-            const radius = hasData ? 6 + (cases / maxCases) * 24 : 4;
+            if (cases <= 0) continue; // Only show crime markers for districts with crime data
+
+            const rate = ((convicted / cases) * 100).toFixed(1);
+            const radius = 7 + (cases / maxCases) * 20;
+
             L.circleMarker([d.lat, d.lng], {
               radius,
-              fillColor: hasData ? '#ef4444' : '#64748b',
-              fillOpacity: hasData ? 0.25 + (cases / maxCases) * 0.45 : 0.35,
-              color: hasData ? '#fca5a5' : '#94a3b8',
-              weight: 1,
+              fillColor: '#f43f5e',
+              fillOpacity: 0.55,
+              color: '#fda4af',
+              weight: 1.5,
               interactive: true,
             })
               .bindTooltip(
-                hasData
-                  ? `<strong>${d.name}</strong><br/>` +
-                    `<span style="font-size:11px;color:#fca5a5">Crime Registrations: ${Number(cases).toLocaleString()}</span><br/>` +
-                    `<span style="font-size:11px;color:#86efac">Convicted: ${Number(convicted).toLocaleString()}</span>`
-                  : `<strong>${d.name}</strong><br/><span style="font-size:11px;color:#94a3b8">No crime data available</span>`,
-                { sticky: true, direction: 'top' },
+                `<strong>${d.name} (${d.state})</strong><br/>` +
+                  `<span style="font-size:11px;color:#fca5a5">Crime Registrations: ${Number(cases).toLocaleString()}</span><br/>` +
+                  `<span style="font-size:11px;color:#86efac">Convicted: ${Number(convicted).toLocaleString()} (${rate}%)</span>`,
+                { sticky: true, direction: 'top', className: 'district-tooltip' },
               )
               .addTo(group);
           }
