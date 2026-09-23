@@ -15,18 +15,21 @@ from logging_config import setup_logging
 
 logger = setup_logging("etl.normalize")
 
-# Known Indian city/district renames and aliases
+# Known Indian city/district renames, modern reclassifications, and aliases
 DISTRICT_ALIASES = {
+    # Metropolitan & Historical Renames
     "bangalore": "bengaluru",
     "bangalore urban": "bengaluru urban",
     "bangalore rural": "bengaluru rural",
     "bombay": "mumbai",
+    "greater bombay": "mumbai",
     "calcutta": "kolkata",
     "madras": "chennai",
     "poona": "pune",
     "baroda": "vadodara",
     "trivandrum": "thiruvananthapuram",
     "cochin": "kochi",
+    "ernakulam": "kochi",
     "calicut": "kozhikode",
     "cawnpore": "kanpur",
     "benares": "varanasi",
@@ -61,12 +64,40 @@ DISTRICT_ALIASES = {
     "north arcot": "tiruvannamalai",
     "south arcot": "cuddalore",
     "gurgaon": "gurugram",
+    "guwahati": "guwahati",
+    "kamrup": "guwahati",
+    "kamrup metropolitan": "guwahati",
+    "ahmedabad": "ahmedabad",
+    "ahmadabad": "ahmedabad",
+    "dehradun": "dehradun",
+    "dehra dun": "dehradun",
+    "panaji": "panaji",
+    "north goa": "panaji",
+
+    # Recent (2020-2024) Government Renames & Modern Districts
+    "allahabad": "prayagraj",
+    "faizabad": "ayodhya",
+    "hoshangabad": "narmadapuram",
+    "osmanabad": "dharashiv",
+    "aurangabad": "chhatrapati sambhajinagar",
+    "medak": "sangareddy",
+    "kanchipuram": "chengalpattu",
+    "vellore": "ranipet",
+    "villupuram": "kallakurichi",
+    "kadapa": "ysr",
+    "nellore": "potti sreeramulu nellore",
+    "kurnool": "nandyal",
+    "leh ladakh": "leh",
 }
 
 STATE_ALIASES = {
     "orissa": "odisha",
     "uttaranchal": "uttarakhand",
     "pondicherry": "puducherry",
+    "telangana": "telangana",
+    "jammu & kashmir": "jammu and kashmir",
+    "dadra & nagar haveli": "dadra and nagar haveli and daman and diu",
+    "daman & diu": "dadra and nagar haveli and daman and diu",
 }
 
 # Suffixes to strip from district names
