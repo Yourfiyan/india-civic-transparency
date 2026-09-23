@@ -26,8 +26,12 @@ export default function App() {
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
 
   const handleDistrictClick = (id: number, name: string) => {
-    setUrlState({ districtId: id, districtName: name, tab: 'district' });
-    setMobileDrawerOpen(true);
+    if (id === 0) {
+      setUrlState({ districtId: null, districtName: null, tab: 'district' });
+    } else {
+      setUrlState({ districtId: id, districtName: name, tab: 'district' });
+      setMobileDrawerOpen(true);
+    }
   };
 
   const toggleLayer = (key: 'districts' | 'crime' | 'infra') => {
@@ -126,14 +130,32 @@ export default function App() {
 
       {/* ─── Map Main Area ─── */}
       <main className="relative flex-1">
-        {/* Mobile menu button */}
-        <button
-          onClick={() => setMobileDrawerOpen(true)}
-          className="absolute left-4 top-4 z-[999] rounded-xl border border-slate-700/80 bg-slate-900/90 p-2.5 text-white shadow-lg backdrop-blur-sm md:hidden"
-          aria-label="Open navigation menu"
-        >
-          ☰
-        </button>
+        {/* Top Floating Control Bar */}
+        <div className="absolute left-4 top-4 z-[999] flex items-center gap-2">
+          {/* Mobile menu button */}
+          <button
+            onClick={() => setMobileDrawerOpen(true)}
+            className="rounded-xl border border-slate-700/80 bg-slate-900/90 p-2.5 text-white shadow-lg backdrop-blur-md transition-colors hover:bg-slate-800 md:hidden"
+            aria-label="Open navigation menu"
+          >
+            ☰
+          </button>
+
+          {/* Reset View Button */}
+          <button
+            onClick={() => {
+              const map = mapRef.current?.getMap();
+              if (map) {
+                map.flyTo([22.5, 78.9], 5, { duration: 1.2 });
+              }
+            }}
+            className="flex items-center gap-1.5 rounded-xl border border-slate-700/80 bg-slate-900/90 px-3 py-2 text-xs font-semibold text-slate-200 shadow-lg backdrop-blur-md transition-all hover:border-indigo-500/50 hover:bg-slate-800 hover:text-white"
+            title="Reset map view to India overview"
+          >
+            <span>⌖</span>
+            <span className="hidden sm:inline">Reset View</span>
+          </button>
+        </div>
 
         <MapView
           ref={mapRef}
