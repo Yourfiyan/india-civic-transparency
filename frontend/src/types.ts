@@ -15,6 +15,7 @@ export interface District {
   area_sq_km: number | null;
   population: number | null;
   dataset_version: string | null;
+  has_data?: boolean;
 }
 
 export interface DistrictCrimeSummary {
