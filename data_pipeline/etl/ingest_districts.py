@@ -53,8 +53,21 @@ def ingest(version: str) -> str:
     normalized_features = []
     for feature in features:
         props = feature.get("properties", {})
-        name = props.get("NAME_3") or props.get("district") or props.get("DISTRICT") or props.get("name", "")
-        state = props.get("NAME_1") or props.get("state") or props.get("STATE") or props.get("ST_NM", "")
+        name = (
+            props.get("NAME_2")
+            or props.get("NAME_3")
+            or props.get("district")
+            or props.get("DISTRICT")
+            or props.get("district_name")
+            or props.get("name", "")
+        )
+        state = (
+            props.get("NAME_1")
+            or props.get("state")
+            or props.get("STATE")
+            or props.get("ST_NM")
+            or props.get("state_name", "")
+        )
 
         if not name or not state:
             logger.warning("Skipping feature with missing name/state: %s", props)
