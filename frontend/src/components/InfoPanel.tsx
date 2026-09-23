@@ -14,12 +14,15 @@ export default function InfoPanel({ districtId, districtName, onDistrictClick }:
   const [allDistricts, setAllDistricts] = useState<(District & { score?: number })[]>([]);
   const [listLoading, setListLoading] = useState(false);
 
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedState, setSelectedState] = useState('');
+
   /* Load district list when no district selected */
   useEffect(() => {
     if (districtId) return;
     setListLoading(true);
     Promise.all([
-      getDistricts(),
+      getDistricts(undefined, undefined),
       getDistrictScores().catch(() => null),
     ]).then(([dRes, sRes]) => {
       const scoreMap = new Map<number, number>();
@@ -42,37 +45,93 @@ export default function InfoPanel({ districtId, districtName, onDistrictClick }:
       .finally(() => setLoading(false));
   }, [districtId]);
 
+  const states = Array.from(new Set(allDistricts.map((d) => d.state).filter(Boolean))).sort();
+
+  const filteredDistricts = allDistricts
+    .filter((d) => {
+      const q = searchQuery.toLowerCase().trim();
+      const matchesSearch =
+        !q ||
+        d.name.toLowerCase().includes(q) ||
+        d.state.toLowerCase().includes(q);
+      const matchesState = !selectedState || d.state.toLowerCase() === selectedState.toLowerCase();
+      return matchesSearch && matchesState;
+    })
+    .sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
+
   if (!districtId) {
     return (
       <div className="space-y-3">
-        <p className="text-xs text-slate-400">Select a district from the map or the list below.</p>
+        <div className="flex items-center justify-between">
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+            Districts ({filteredDistricts.length})
+          </h2>
+        </div>
+
+        {/* Search & State Filter */}
+        <div className="space-y-2">
+          <div className="relative">
+            <span className="absolute left-3 top-2.5 text-xs text-slate-500">🔍</span>
+            <input
+              type="text"
+              placeholder="Search district or state…"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full rounded-lg border border-slate-700 bg-slate-800/60 py-2 pl-8 pr-3 text-xs text-slate-200 placeholder-slate-500 outline-none transition-colors focus:border-indigo-500"
+            />
+          </div>
+          {states.length > 0 && (
+            <select
+              value={selectedState}
+              onChange={(e) => setSelectedState(e.target.value)}
+              className="w-full rounded-lg border border-slate-700 bg-slate-800/60 py-1.5 px-2.5 text-xs text-slate-300 outline-none focus:border-indigo-500"
+            >
+              <option value="">All States & UTs ({states.length})</option>
+              {states.map((st) => (
+                <option key={st} value={st}>{st}</option>
+              ))}
+            </select>
+          )}
+        </div>
+
         {listLoading && (
           <div className="flex items-center justify-center py-8">
             <div className="h-5 w-5 animate-spin rounded-full border-2 border-indigo-500 border-t-transparent" />
             <span className="ml-2 text-xs text-slate-400">Loading districts…</span>
           </div>
         )}
-        {allDistricts.map((d) => (
-          <button
-            key={d.id}
-            onClick={() => onDistrictClick?.(d.id, d.name)}
-            className="flex w-full items-center justify-between rounded-xl border border-slate-700/50 bg-slate-800/40 p-3 text-left transition-all duration-150 hover:border-indigo-500/30 hover:bg-slate-800/70"
-          >
-            <div>
-              <span className="text-sm font-semibold text-slate-100">{d.name}</span>
-              <span className="ml-2 text-xs text-slate-500">{d.state}</span>
-            </div>
-            {d.score != null && (
-              <span className={`rounded-lg px-2 py-0.5 text-xs font-bold ${
-                d.score >= 60 ? 'bg-emerald-900/40 text-emerald-300'
-                  : d.score >= 40 ? 'bg-amber-900/40 text-amber-300'
-                  : 'bg-rose-900/40 text-rose-300'
-              }`}>
-                {d.score.toFixed(1)}
-              </span>
-            )}
-          </button>
-        ))}
+
+        <div className="max-h-[calc(100vh-320px)] space-y-2 overflow-y-auto pr-1">
+          {filteredDistricts.slice(0, 50).map((d) => (
+            <button
+              key={d.id}
+              onClick={() => onDistrictClick?.(d.id, d.name)}
+              className="flex w-full items-center justify-between rounded-xl border border-slate-700/50 bg-slate-800/40 p-2.5 text-left transition-all duration-150 hover:border-indigo-500/40 hover:bg-slate-800/70"
+            >
+              <div>
+                <div className="text-xs font-semibold text-slate-100">{d.name}</div>
+                <div className="text-[0.65rem] text-slate-400">{d.state}</div>
+              </div>
+              {d.score != null && (
+                <span className={`rounded-md px-1.5 py-0.5 text-[0.65rem] font-bold ${
+                  d.score >= 60 ? 'bg-emerald-900/40 text-emerald-300'
+                    : d.score >= 40 ? 'bg-amber-900/40 text-amber-300'
+                    : 'bg-rose-900/40 text-rose-300'
+                }`}>
+                  {d.score.toFixed(1)}
+                </span>
+              )}
+            </button>
+          ))}
+          {filteredDistricts.length > 50 && (
+            <p className="text-center text-[0.65rem] text-slate-500">
+              Showing top 50 of {filteredDistricts.length} results. Use search to narrow down.
+            </p>
+          )}
+          {!listLoading && filteredDistricts.length === 0 && (
+            <p className="py-6 text-center text-xs text-slate-500">No matching districts found.</p>
+          )}
+        </div>
       </div>
     );
   }
@@ -99,6 +158,15 @@ export default function InfoPanel({ districtId, districtName, onDistrictClick }:
 
   return (
     <div className="space-y-4">
+      {/* Back Button */}
+      <button
+        onClick={() => onDistrictClick?.(0, '')}
+        className="flex items-center gap-1.5 text-xs font-semibold text-indigo-400 transition-colors hover:text-indigo-300"
+      >
+        <span>←</span>
+        <span>Back to All Districts</span>
+      </button>
+
       {/* Header */}
       <div className="rounded-xl border border-slate-700/50 bg-slate-800/40 p-4">
         <div className="flex items-center gap-2">
