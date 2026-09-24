@@ -69,7 +69,7 @@
     "decision_date": "2015-03-24",
     "citation": "(2015) 5 SCC 1",
     "court": "Supreme Court of India",
-    "description": "Struck down Section 66A of the IT Act as unconstitutional — freedom of speech online.",
+    "description": "Struck down Section 66A of the IT Act as unconstitutional \u2014 freedom of speech online.",
     "dataset_source": "s3://indian-supreme-court-judgments/",
     "dataset_version": "seed-v1",
     "ingested_at": "2026-01-01T00:00:00Z"
@@ -114,7 +114,7 @@
     "decision_date": "2018-09-28",
     "citation": "(2019) 11 SCC 1",
     "court": "Supreme Court of India",
-    "description": "Sabarimala case — women of all ages allowed entry to the temple.",
+    "description": "Sabarimala case \u2014 women of all ages allowed entry to the temple.",
     "dataset_source": "s3://indian-supreme-court-judgments/",
     "dataset_version": "seed-v1",
     "ingested_at": "2026-01-01T00:00:00Z"
@@ -144,7 +144,7 @@
     "decision_date": "2018-09-27",
     "citation": "(2019) 3 SCC 39",
     "court": "Supreme Court of India",
-    "description": "Struck down Section 497 IPC — decriminalized adultery.",
+    "description": "Struck down Section 497 IPC \u2014 decriminalized adultery.",
     "dataset_source": "s3://indian-supreme-court-judgments/",
     "dataset_version": "seed-v1",
     "ingested_at": "2026-01-01T00:00:00Z"
@@ -159,7 +159,7 @@
     "decision_date": "2019-11-09",
     "citation": "(2020) 1 SCC 1",
     "court": "Supreme Court of India",
-    "description": "Ayodhya land dispute — directed land to be given for Ram temple construction.",
+    "description": "Ayodhya land dispute \u2014 directed land to be given for Ram temple construction.",
     "dataset_source": "s3://indian-supreme-court-judgments/",
     "dataset_version": "seed-v1",
     "ingested_at": "2026-01-01T00:00:00Z"
@@ -174,7 +174,7 @@
     "decision_date": "2020-01-10",
     "citation": "(2020) 3 SCC 637",
     "court": "Supreme Court of India",
-    "description": "Internet shutdowns in J&K — access to internet is a fundamental right under Article 19.",
+    "description": "Internet shutdowns in J&K \u2014 access to internet is a fundamental right under Article 19.",
     "dataset_source": "s3://indian-supreme-court-judgments/",
     "dataset_version": "seed-v1",
     "ingested_at": "2026-01-01T00:00:00Z"
@@ -264,7 +264,7 @@
     "decision_date": "2023-10-17",
     "citation": "2023 SCC OnLine SC 1348",
     "court": "Supreme Court of India",
-    "description": "Same-sex marriage petition — recognition of queer unions under the Special Marriage Act.",
+    "description": "Same-sex marriage petition \u2014 recognition of queer unions under the Special Marriage Act.",
     "dataset_source": "s3://indian-supreme-court-judgments/",
     "dataset_version": "seed-v1",
     "ingested_at": "2026-01-01T00:00:00Z"
@@ -294,7 +294,7 @@
     "decision_date": "2024-02-15",
     "citation": "2024 SCC OnLine SC 150",
     "court": "Supreme Court of India",
-    "description": "Electoral bonds scheme struck down as unconstitutional — right to information on political funding.",
+    "description": "Electoral bonds scheme struck down as unconstitutional \u2014 right to information on political funding.",
     "dataset_source": "s3://indian-supreme-court-judgments/",
     "dataset_version": "seed-v1",
     "ingested_at": "2026-01-01T00:00:00Z"
@@ -324,7 +324,7 @@
     "decision_date": "2018-03-09",
     "citation": "(2018) 5 SCC 1",
     "court": "Supreme Court of India",
-    "description": "Right to die with dignity — legalized passive euthanasia and living wills.",
+    "description": "Right to die with dignity \u2014 legalized passive euthanasia and living wills.",
     "dataset_source": "s3://indian-supreme-court-judgments/",
     "dataset_version": "seed-v1",
     "ingested_at": "2026-01-01T00:00:00Z"
@@ -339,7 +339,7 @@
     "decision_date": "2018-09-28",
     "citation": "(2018) 10 SCC 802",
     "court": "Supreme Court of India",
-    "description": "Bhima Koregaon case — petition challenging arrest of activists and UAPA.",
+    "description": "Bhima Koregaon case \u2014 petition challenging arrest of activists and UAPA.",
     "dataset_source": "s3://indian-supreme-court-judgments/",
     "dataset_version": "seed-v1",
     "ingested_at": "2026-01-01T00:00:00Z"
@@ -354,7 +354,7 @@
     "decision_date": "2020-11-11",
     "citation": "(2021) 2 SCC 427",
     "court": "Supreme Court of India",
-    "description": "Liberty and bail — courts must protect individual liberty.",
+    "description": "Liberty and bail \u2014 courts must protect individual liberty.",
     "dataset_source": "s3://indian-supreme-court-judgments/",
     "dataset_version": "seed-v1",
     "ingested_at": "2026-01-01T00:00:00Z"
@@ -369,7 +369,52 @@
     "decision_date": "2023-10-03",
     "citation": "2023 SCC OnLine SC 1244",
     "court": "Supreme Court of India",
-    "description": "ECIR and supply of material under PMLA — right of the arrested person.",
+    "description": "ECIR and supply of material under PMLA \u2014 right of the arrested person.",
+    "dataset_source": "s3://indian-supreme-court-judgments/",
+    "dataset_version": "seed-v1",
+    "ingested_at": "2026-01-01T00:00:00Z"
+  },
+  {
+    "case_id": "SC-2015-026",
+    "title": "Greater Hyderabad Municipal Corporation v. M. Goverdhan Reddy",
+    "petitioner": "Greater Hyderabad Municipal Corporation",
+    "respondent": "M. Goverdhan Reddy & Ors.",
+    "judge": "Justice J. Chelameswar",
+    "date_filed": "2012-04-10",
+    "decision_date": "2015-09-18",
+    "citation": "(2015) 12 SCC 681",
+    "court": "Supreme Court of India",
+    "description": "Municipal property tax assessment and regulatory powers of GHMC in Hyderabad urban agglomeration.",
+    "dataset_source": "s3://indian-supreme-court-judgments/",
+    "dataset_version": "seed-v1",
+    "ingested_at": "2026-01-01T00:00:00Z"
+  },
+  {
+    "case_id": "SC-2018-027",
+    "title": "State of Telangana v. Hyderabad Urban Development Authority & Ors.",
+    "petitioner": "State of Telangana",
+    "respondent": "Hyderabad Urban Development Authority",
+    "judge": "Justice N.V. Ramana",
+    "date_filed": "2014-11-20",
+    "decision_date": "2018-02-15",
+    "citation": "(2018) 4 SCC 320",
+    "court": "Supreme Court of India",
+    "description": "Land acquisition and master planning rights following Telangana state bifurcation and Hyderabad common capital transition.",
+    "dataset_source": "s3://indian-supreme-court-judgments/",
+    "dataset_version": "seed-v1",
+    "ingested_at": "2026-01-01T00:00:00Z"
+  },
+  {
+    "case_id": "SC-2021-028",
+    "title": "Hussain Sagar Lake Cleanliness & Heritage Conservation v. State of Telangana",
+    "petitioner": "Citizens for Clean Hyderabad",
+    "respondent": "State of Telangana & Pollution Control Board",
+    "judge": "Justice D.Y. Chandrachud",
+    "date_filed": "2019-06-12",
+    "decision_date": "2021-08-27",
+    "citation": "(2021) 9 SCC 412",
+    "court": "Supreme Court of India",
+    "description": "Environmental guidelines on idol immersion and pollution abatement in Hussain Sagar lake, Hyderabad.",
     "dataset_source": "s3://indian-supreme-court-judgments/",
     "dataset_version": "seed-v1",
     "ingested_at": "2026-01-01T00:00:00Z"
