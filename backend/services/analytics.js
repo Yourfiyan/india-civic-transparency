@@ -112,9 +112,9 @@ async function getDistrictScore({ year, state, dataset_version }) {
   const crimeWhere = crimeConditions.length > 0 ? `WHERE ${crimeConditions.join(' AND ')}` : '';
   const infraWhere = infraConditions.length > 0 ? `WHERE ${infraConditions.join(' AND ')}` : '';
 
-  let stateFilter = '';
+  let whereClause = 'WHERE (ca.district_id IS NOT NULL OR ia.district_id IS NOT NULL)';
   if (state) {
-    stateFilter = `WHERE d.state_normalized = $${paramIndex}`;
+    whereClause += ` AND d.state_normalized = $${paramIndex}`;
     params.push(state.toLowerCase().trim());
     paramIndex++;
   }
@@ -146,6 +146,7 @@ async function getDistrictScore({ year, state, dataset_version }) {
     )
     SELECT
         d.id AS district_id, d.name, d.state,
+        true AS has_data,
         ROUND(
             COALESCE(CASE WHEN r.max_crime > r.min_crime
                  THEN (1.0 - (ca.total_crime - r.min_crime)::numeric / (r.max_crime - r.min_crime)) * 25
@@ -172,7 +173,7 @@ async function getDistrictScore({ year, state, dataset_version }) {
     LEFT JOIN crime_agg ca ON ca.district_id = d.id
     LEFT JOIN infra_agg ia ON ia.district_id = d.id
     CROSS JOIN ranges r
-    ${stateFilter}
+    ${whereClause}
     ORDER BY score DESC`,
     params
   );
